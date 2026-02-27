@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-  <executable name="dist/default/production/MP2.X.production.elf">
+  <executable name="dist/default/production/Code.X.production.elf">
     <memory name="program">
       <units>bytes</units>
       <length>262144</length>
-      <used>10600</used>
-      <free>251544</free>
+      <used>8632</used>
+      <free>253512</free>
     </memory>
     <memory name="data">
       <units>bytes</units>

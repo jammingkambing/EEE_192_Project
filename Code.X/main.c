@@ -317,23 +317,12 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 
 
 int main(void) {
-    int desired_per;
-    int step_duty;
-    int curr_adc = 0;
-    struct {
-		unsigned int sweep;
-	} tick_ctrs;
     
-    int evt_flags = 0;
-    float adc_fraction;
-    float curr_adc_f;
-    float adjusted_adc_fraction;
-    tick_ctrs.sweep = 0;
-    unsigned int ts_delta, ts_curr;
+    
+    
     platform_init_early();
     platform_usart_cdc_init();
     platform_init_late();
-    int x, y;
     
     ps.tx_flags = 0x0001;
     
@@ -341,143 +330,11 @@ int main(void) {
     PORT_SEC_REGS->GROUP[1].PORT_OUTSET |= (1 << 23);
     PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 14);
     
-    for (;;) {
-//       ts_curr   = platform_tick_count();
-       
-        idx_message = trip;
-        
-        ts_curr = platform_systick_count();
-		prog_loop_do_one_tx(&ps, idx_message);
-		prog_loop_do_one_rx(&ps);
-		
-		// Check what other events, if any, are present
-//		if ((evt & PLATFORM_EVT_PB_PRESS) != 0) {
-//			// Refresh (w/ color change)
-//			ps.tx_flags |= 0x0005;
-//            idx_message += 1;
-//            
-//            if (idx_message > 7) {
-//                idx_message = 0;
-//            }
-//		}
-    
-        
-       if ((PORT_SEC_REGS->GROUP[1].PORT_IN & (1 << 22)) == 0) {
-           trip = 0;
-       }
-       if (trip == 0) {
-            PORT_SEC_REGS->GROUP[1].PORT_OUT &= ~(1 << 23);
-            PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 15);
-            PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 3);
-            PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 6);
-            step_per = 6251;
-            step_duty = 0;
-            stepper = 0;
-            setting = 0;
-            if (ts_delta >= (20/PLATFORM_TICK_MS)) {
-//                    // At least 50 ms have elapsed
-                        
-                        ps.tx_flags |= 0x0002;
-                }
-            speed = 0;
-        }
-       
-        if (trip) { //Local mode
-            PORT_SEC_REGS->GROUP[0].PORT_OUTSET |= (1 << 15);
-            ts_delta = platform_tick_delta(ts_curr, tick_ctrs.sweep);
-            
-            if (stepper) {
-                //dito papasok yung ADC
-                if ((ADC_REGS->ADC_INTFLAG & (1 << 0)) != 0){
-                    x = ADC_REGS->ADC_RESULT;
-                    if (x < curr_adc) {
-                        y = curr_adc - x;
-                    } else {
-                        y = x - curr_adc;
-                    }
-
-                    if (y >= 3 ) {
-                        // Commit the new value
-                        curr_adc = x;
-                    }
-                    ADC_REGS->ADC_INTFLAG |= (1 << 0);
-                }
-             
-               curr_adc_f = curr_adc;
-               adc_fraction = curr_adc_f/1024;
-               adjusted_adc_fraction = 1 - (curr_adc_f/1024);
-                
-               if (curr_adc > 512) {
-                   desired_per = adjusted_adc_fraction*3125;
-                   PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 14); 
-                   setting = 1;
-                   if (curr_adc > 718) {
-                       speed = 2;
-                   }
-                   else {
-                       speed = 1;
-                   }
-                }
-                if (curr_adc <= 512) {
-                    desired_per = (adc_fraction)*3125;
-                    PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 14);
-                    setting = 2;
-                    if (curr_adc < 206) {
-                       speed = 2;
-                   }
-                   else {
-                       speed = 1;
-                   }
-                }    
-                if (ts_delta >= (20/PLATFORM_TICK_MS)) {
-//                    // At least 50 ms have elapsed
-                        tick_ctrs.sweep = ts_curr;
-                        
-                        if (step_per <= desired_per) {
-                            step_per += 8;
-                        }
-                        else {
-                            step_per -= 8;
-                        }
-                        ps.tx_flags |= 0x0002;
-                }
-                PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 6); // Turn off Green LED
-                PORT_SEC_REGS->GROUP[0].PORT_OUTSET |= (1 << 3); //Turn on Red LED
-                PORT_SEC_REGS->GROUP[1].PORT_OUT |= (1 << 23); //DRV.EN
-            }
-            if (stepper == 0) {
-               if (ts_delta >= (20/PLATFORM_TICK_MS)) {
-                    // At least 20 ms have elapsed
-                        tick_ctrs.sweep = ts_curr;
-//                        step_freq = decrease_freq(step_freq);
-                        if (step_per < 6250) {
-                            step_per += 8;
-                        }
-                        else {
-                            step_duty = 0;
-                        }
-                        ps.tx_flags |= 0x0002;
-                    }  
-                PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 20);
-                setting = 0;
-                speed = 0;
-            }
-        }
-        //PORT_SEC_REGS->GROUP[1].PORT_OUT |= (1 << 23);
-       step_duty = 50;
-    if ((step_per >= 6250) && trip) {
-                            step_duty = 0;
-                            PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 6);
-                            PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 3);
-                            PORT_SEC_REGS->GROUP[1].PORT_OUT &= ~(1 << 23);
-    }
-    if (step_per < 80) {
-                        step_per = 80;
-    }
-    if ((TC1_REGS->COUNT16.TC_SYNCBUSY & 0x00000080) == 0) {
-				TC1_REGS->COUNT16.TC_CCBUF[0] = step_duty;// Ito yung magbabago ng duty cycle
-                TC1_REGS->COUNT16.TC_PER = step_per;
-			}
+    for (;;) {     
+       // TEMPORARY LANG TOH 
+        // configured for CCW operation
+       PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 6); //IN1 = L
+       PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 3); //IN2 = H
+       PORT_SEC_REGS->GROUP[1].PORT_OUT |= (1 << 23); //STANDBY = H
     }
 }
-
