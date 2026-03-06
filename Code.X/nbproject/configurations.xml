@@ -25,6 +25,8 @@
       <itemPath>irq_handlers.c</itemPath>
       <itemPath>platform.c</itemPath>
       <itemPath>usart.c</itemPath>
+      <itemPath>locomotion.c</itemPath>
+      <itemPath>wireless.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>

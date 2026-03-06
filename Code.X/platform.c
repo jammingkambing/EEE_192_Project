@@ -204,13 +204,29 @@ void do_raise_perf_level(void)
 // Configure port I/O here; do not enable PMUXEN yet
 void PORT_init_early(void)
 {
+    // PA00: Input Latch SW3
+    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 0);
+	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[0] = 0x02;
+    
+    // PA01: Input Latch SW4
+    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 1);
+	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[1] = 0x02;
+    
+    // PA02: Active-HI Output
+	PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 1);
+	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 1);
+    
     // PA03: Active-HI Output, RED LED
 	PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 3);
 	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 3);
     
-    // PA06: GREEN LED
+    // PA06: Active-HI Output
 	PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 6);
 	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 6);
+    
+    // PA07: Active-HI Output
+	PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 7);
+	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 7);
     
 	// PA20: Active-HI Output, DRV.STEP
     PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 20);
@@ -220,29 +236,30 @@ void PORT_init_early(void)
     PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 14);
 	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 14);
     
-    // PB23: Active-HI Output, DRV.EN
-    PORT_SEC_REGS->GROUP[1].PORT_OUTCLR = (1 << 23);
-	PORT_SEC_REGS->GROUP[1].PORT_DIRSET = (1 << 23);
-    
     // PA15: Active-HI LED
     PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 15);
 	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 15);
+    
+    // PA15: Active-HI Output
+    PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 19);
+	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 19);
     
     // PA23: Active-LO Push Button
     PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 23);
 	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[23] = 0x02;
     
-    // PA00: Input Latch SW3
-    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 0);
-	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[0] = 0x02;
-    
-    // PA01: Input Latch SW4
-    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 1);
-	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[1] = 0x02;
+    // PB03: Active-HI Output
+    PORT_SEC_REGS->GROUP[1].PORT_OUTCLR = (1 << 3);
+	PORT_SEC_REGS->GROUP[1].PORT_DIRSET = (1 << 3);
     
     // PB22: Active-LO SYS.TRIP (overline)
     PORT_SEC_REGS->GROUP[1].PORT_DIRCLR = (1 << 22);
 	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[22] = 0x02;
+    
+    // PB23: Active-HI Output, DRV.EN
+    PORT_SEC_REGS->GROUP[1].PORT_OUTCLR = (1 << 23);
+	PORT_SEC_REGS->GROUP[1].PORT_DIRSET = (1 << 23);
+    
     
 	return;
 

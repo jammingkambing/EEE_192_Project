@@ -25,16 +25,16 @@ char setting_ptr[9];
 static const char banner_msg[] =
 "\033[2J\033[1;1H"
 "+----------------------------------------------------------------+\r\n"
-"| EEE 158: Electrical and Electronics Engineering Laboratory V   |\r\n"
-"|          Academic Year 2025-2026, Semester 1                   |\r\n"
+"| EEE 192: Electrical and Electronics Engineering Laboratory VI  |\r\n"
+"|          Academic Year 2025-2026, Semester 2                   |\r\n"
 "|                                                                |\r\n"
-"| Machine Problem 1                                              |\r\n"
+"| Robutt                                                         |\r\n"
 "|                                                                |\r\n"
-"| Author: Eclarin, Jamina Angel                                  |\r\n"
+"| Author: Meows!                                                 |\r\n"
 "|                                                                |\r\n"
-"| Date:    17 December 2025                                      |\r\n"
+"| Date:    2026                                                  |\r\n"
 "+----------------------------------------------------------------+\r\n"
-"| INSTRUCTIONS: Happy Christmas break!                           |\r\n"
+"| INSTRUCTIONS: Have fun!                                        |\r\n"
 "+----------------------------------------------------------------+\r\n"
 "\r\n"
 "Direction: "	// Line 14
@@ -252,32 +252,20 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
         
         
         //arrows
-//        if (ps->rx_info.len == 3 && ps->rx_info.buf[1] == 0x5B) {
-//            if (ps->rx_info.buf[2] == 0x41) {
-//                led_dc += 10;
-//                if (led_dc > 100) {
-//                    led_dc = 100;
-//                }
-//            }
-//            if (ps->rx_info.buf[2] == 0x42) {
-//                led_dc -= 10;
-//                if (led_dc < 10) {
-//                    led_dc = 10;
-//                }
-//            }
-//            if (ps->rx_info.buf[2] == 0x43) {
-//                setting += 1;
-//                if (setting > 4) {
-//                    setting = 4;
-//                }
-//            }
-//            if (ps->rx_info.buf[2] == 0x44) {
-//                setting -= 1;
-//                if (setting < 0) {
-//                    setting = 0;
-//                }
-//            }
-//        }
+        if (ps->rx_info.len == 3 && ps->rx_info.buf[1] == 0x5B) {
+            if (ps->rx_info.buf[2] == 0x41) {
+//              //turn_right()
+            }
+            if (ps->rx_info.buf[2] == 0x42) {
+                //turn_left()
+            }
+            if (ps->rx_info.buf[2] == 0x43) {
+//              //go_forward()
+            }
+            if (ps->rx_info.buf[2] == 0x44) {
+//              //go_reverse() 
+            }
+        }
 		if (ps->rx_info.len > 1 && ps->rx_info.buf[0] == '\033') {
 			/*
 			 * Escape sequence
@@ -318,19 +306,18 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 
 int main(void) {
     
-    
-    
     platform_init_early();
     platform_usart_cdc_init();
     platform_init_late();
     
     ps.tx_flags = 0x0001;
     
-    // need to set DRV.EN 
-    PORT_SEC_REGS->GROUP[1].PORT_OUTSET |= (1 << 23);
-    PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 14);
+    idx_message = 0;
     
-    for (;;) {     
+    for (;;) {
+        
+        prog_loop_do_one_tx(&ps, idx_message);
+		prog_loop_do_one_rx(&ps);
        // TEMPORARY LANG TOH 
         // configured for CCW operation
        PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 6); //IN1 = L
