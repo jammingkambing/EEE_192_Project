@@ -104,6 +104,15 @@ extern "C" {
 	 * defining flags, make sure no two flags use the same bit.
          */
 	extern void platform_evt_add(int evt);
+    
+    /**
+	 * For basic locomotion functions
+         */
+    extern void turn_right(void);
+    extern void turn_left(void);
+    extern void go_forward(void);
+    extern void go_backward(void);
+    extern void stop(void);
 	
 	/**
 	 * Get available platform-event flags

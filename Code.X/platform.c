@@ -213,8 +213,8 @@ void PORT_init_early(void)
 	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[1] = 0x02;
     
     // PA02: Active-HI Output
-	PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 1);
-	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 1);
+	PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 2);
+	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 2);
     
     // PA03: Active-HI Output, RED LED
 	PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 3);

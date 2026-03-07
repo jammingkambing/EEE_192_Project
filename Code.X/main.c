@@ -319,15 +319,12 @@ int main(void) {
        // prog_loop_do_one_tx(&ps, idx_message);
        // prog_loop_do_one_rx(&ps);
        // TEMPORARY LANG TOH 
-        // configured for CCW operation
-       // A = CW
-        PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 6); //IN1 = H
-        PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 3); //IN2 = L
-        PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 2); //PWM = H
-        PORT_SEC_REGS->GROUP[1].PORT_OUT |= (1 << 3); //STANDBY = H
-        // B = CW
-        PORT_SEC_REGS->GROUP[1].PORT_OUT |= (1 << 23); //IN1 = H
-        PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 19); //IN2 = L
-        PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 7); //PWM = H
+        
+        
+        turn_right();
+        //turn_left();
+        //go_forward();
+        //go_backward();
+        //stop();
     }
 }
