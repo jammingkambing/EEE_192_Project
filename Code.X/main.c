@@ -54,6 +54,11 @@ static const struct platform_ro_buf_desc color_schem[] = { // These are SGR colo
 	{"\033[37;40m", 8},
     {"\033[36;40m", 8},
     {"\033[35;40m", 8},
+    {"\033[33;40m", 8},
+	{"\033[97;41m", 8},
+	{"\033[92;40m", 8},
+	{"\033[97;44m", 8},
+    {"\033[30;47m", 8},
 };
 #define NR_COLOR_SCHEM (8)
 
@@ -109,8 +114,10 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
 		return;
 	}
 	ps->tx_flags &= ~0x8000;
-	
-
+    if (ps->tx_flags == 0) {
+		// Nothing to transmit
+		return;
+	}
 	/*
 	 * First check for the banner message. If it is set, all other updates
 	 * are implied.
@@ -151,14 +158,21 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
             ps->tx_desc[ps->tx_nr_desc].len = 4;
             break;
             case 1:
-            ps->tx_desc[ps->tx_nr_desc].buf = "CCW";
-            ps->tx_desc[ps->tx_nr_desc].len = 3;
+            ps->tx_desc[ps->tx_nr_desc].buf = "FORWARD";
+            ps->tx_desc[ps->tx_nr_desc].len = 7;
             break;
             case 2:
-            ps->tx_desc[ps->tx_nr_desc].buf = "CW";
-            ps->tx_desc[ps->tx_nr_desc].len = 2;
+            ps->tx_desc[ps->tx_nr_desc].buf = "BACKWARD";
+            ps->tx_desc[ps->tx_nr_desc].len = 8;
             break;
-            
+            case 3:
+            ps->tx_desc[ps->tx_nr_desc].buf = "RIGHT";
+            ps->tx_desc[ps->tx_nr_desc].len = 5;
+            break;
+            case 4:
+            ps->tx_desc[ps->tx_nr_desc].buf = "LEFT";
+            ps->tx_desc[ps->tx_nr_desc].len = 4;
+            break;
         }
         
         ps->tx_nr_desc += 1;
@@ -170,7 +184,7 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
         switch (speed) {
             case 0:
             ps->tx_desc[ps->tx_nr_desc].buf = "no fast";
-            ps->tx_desc[ps->tx_nr_desc].len = 10;
+            ps->tx_desc[ps->tx_nr_desc].len = 7;
             break;
             case 1:
             ps->tx_desc[ps->tx_nr_desc].buf = "medyo fast";
@@ -178,7 +192,7 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
             break;
             case 2:
             ps->tx_desc[ps->tx_nr_desc].buf = "SKREEEE";
-            ps->tx_desc[ps->tx_nr_desc].len = 10;
+            ps->tx_desc[ps->tx_nr_desc].len = 7;
             break;
             
         }
@@ -192,12 +206,12 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
         
         switch (idx_message) {
             case 0:
-            ps->tx_desc[ps->tx_nr_desc].buf = "TRIP";
-            ps->tx_desc[ps->tx_nr_desc].len = 4;
+            ps->tx_desc[ps->tx_nr_desc].buf = "REMOTE";
+            ps->tx_desc[ps->tx_nr_desc].len = 6;
             break;
             case 1:
-            ps->tx_desc[ps->tx_nr_desc].buf = "LOCAL";
-            ps->tx_desc[ps->tx_nr_desc].len = 5;
+            ps->tx_desc[ps->tx_nr_desc].buf = "AUTONOMOUS";
+            ps->tx_desc[ps->tx_nr_desc].len = 9;
             break;
             
         }
@@ -232,6 +246,8 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 			// Fall through
 		} else {
 			// No message received yet
+            stop();
+            setting = 0;
 			break;
 		}
 	case 2:
@@ -239,34 +255,37 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 		if ((ps->tx_flags & 0x8000) != 0) {
 			// Still busy...
 			break;
-		}
+		}   
         
-        
-        
-        ps->tx_buf_len = 0;
-        
+        ps->tx_buf_len = 0;   
          
         ps->tx_flags |= 0x0002;
 		ps->state_id += 1;
         
-        
-        
         //arrows
         if (ps->rx_info.len == 3 && ps->rx_info.buf[1] == 0x5B) {
             if (ps->rx_info.buf[2] == 0x41) {
-//              //turn_right()
+              go_forward();
+              setting = 1;
             }
-            if (ps->rx_info.buf[2] == 0x42) {
-                //turn_left()
+            else if (ps->rx_info.buf[2] == 0x42) {
+              go_backward(); 
+              setting = 2;
             }
-            if (ps->rx_info.buf[2] == 0x43) {
-//              //go_forward()
+            else if (ps->rx_info.buf[2] == 0x43) {
+              turn_right();
+              setting = 3;
             }
-            if (ps->rx_info.buf[2] == 0x44) {
-//              //go_reverse() 
+            else if (ps->rx_info.buf[2] == 0x44) {
+              turn_left();
+              setting = 4;
+            }
+            else {
+                stop();
+                setting = 0;
             }
         }
-		if (ps->rx_info.len > 1 && ps->rx_info.buf[0] == '\033') {
+		else if (ps->rx_info.len > 1 && ps->rx_info.buf[0] == '\033') {
 			/*
 			 * Escape sequence
 			 * 
@@ -284,6 +303,10 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 				ps->tx_flags |= 0x0001;
 			}
 		}
+        else {
+            stop();
+            setting = 0;
+        }
 		break;
 	case 3:
 		// Waiting for the message to be transmitted
@@ -306,6 +329,12 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 
 int main(void) {
     
+    struct {
+		unsigned int sweep;
+	} tick_ctrs;
+    tick_ctrs.sweep = 0;
+    unsigned int ts_delta, ts_curr;
+    
     platform_init_early();
     platform_usart_cdc_init();
     platform_init_late();
@@ -315,13 +344,21 @@ int main(void) {
     idx_message = 0;
     
     for (;;) {
-        
-       // prog_loop_do_one_tx(&ps, idx_message);
-       // prog_loop_do_one_rx(&ps);
+      
+       ts_curr = platform_systick_count();
+       ts_delta = platform_tick_delta(ts_curr, tick_ctrs.sweep);
+       
+       prog_loop_do_one_tx(&ps, idx_message);
+       prog_loop_do_one_rx(&ps);
+       
+        if (ts_delta >= (20/PLATFORM_TICK_MS)) {
+//          // At least 20 ms have elapsed
+            tick_ctrs.sweep = ts_curr;
+        }
        // TEMPORARY LANG TOH 
         
         
-        turn_right();
+        //turn_right();
         //turn_left();
         //go_forward();
         //go_backward();
