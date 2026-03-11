@@ -265,23 +265,18 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
         //arrows
         if (ps->rx_info.len == 3 && ps->rx_info.buf[1] == 0x5B) {
             if (ps->rx_info.buf[2] == 0x41) {
-              go_forward();
               setting = 1;
             }
-            else if (ps->rx_info.buf[2] == 0x42) {
-              go_backward(); 
+            else if (ps->rx_info.buf[2] == 0x42) { 
               setting = 2;
             }
             else if (ps->rx_info.buf[2] == 0x43) {
-              turn_right();
               setting = 3;
             }
             else if (ps->rx_info.buf[2] == 0x44) {
-              turn_left();
               setting = 4;
             }
             else {
-                stop();
                 setting = 0;
             }
         }
@@ -355,13 +350,24 @@ int main(void) {
 //          // At least 20 ms have elapsed
             tick_ctrs.sweep = ts_curr;
         }
-       // TEMPORARY LANG TOH 
         
+       switch (setting) {
+           case 0:
+               stop();
+               break;
+           case 1:
+               go_forward();
+               break;
+           case 2: 
+               go_backward();
+               break;
+           case 3: 
+               turn_right();
+               break;
+           case 4: 
+               turn_left();
+               break;
+       }
         
-        //turn_right();
-        //turn_left();
-        //go_forward();
-        //go_backward();
-        //stop();
     }
 }
