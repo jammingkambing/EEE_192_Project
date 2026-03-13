@@ -368,6 +368,13 @@ int main(void) {
                turn_left();
                break;
        }
+       
+       // I'm gonna have to figure out the logic for this... disgusting
+       //if ((TCC3_REGS->TCC_SYNCBUSY & 0x00000080) == 0) {
+       //         TCC3_REGS->TCC_CCBUF[1] = red*brightness;
+       //         TCC3_REGS->TCC_CCBUF[0] = green*brightness;
+       //         TCC3_REGS->TCC_CCBUF[3] = blue*brightness;
+		//	}
         
     }
 }

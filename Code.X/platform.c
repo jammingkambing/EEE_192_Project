@@ -23,8 +23,8 @@ static void do_raise_perf_level(void);
 static void PORT_init_early(void);
 static void EIC_init_early(void);
 static void EIC_init_late(void);
-static void TC_init_early(void);
-static void TC_init_late(void);
+static void TCC_init_early(void);
+static void TCC_init_late(void);
 static void ADC_init(void);
 
 // ==========================================================================
@@ -366,8 +366,8 @@ void TCC_init_early(void) {
 	 * (Why this TC instance?)
 	 * =============================================================
 	 */
-	GCLK_REGS->GCLK_PCHCTRL[23] = 0x00000042;
-	while ((GCLK_REGS->GCLK_PCHCTRL[23] & (1 << 6)) == 0) {
+	GCLK_REGS->GCLK_PCHCTRL[27] = 0x00000042;
+	while ((GCLK_REGS->GCLK_PCHCTRL[27] & (1 << 6)) == 0) {
 		// Wait for synchronization
 		asm("nop");
 	}
@@ -384,8 +384,8 @@ void TCC_init_early(void) {
 	 * ENABLE should be set last.
 	 * =============================================================
 	 */
-	TCC1_REGS->TCC_CTRLA = 0x00000001;
-	while ((TCC1_REGS->TCC_SYNCBUSY & (1 << 0)) != 0) {
+	TCC3_REGS->TCC_CTRLA = 0x00000001;
+	while ((TCC3_REGS->TCC_SYNCBUSY & (1 << 0)) != 0) {
 		// Wait for synchronization
 		asm("nop");
 	}
@@ -400,7 +400,7 @@ void TCC_init_early(void) {
 	 * 
 	 * (4e6) / (64*(99+1)) = 625 Hz
 	 */
-	TCC1_REGS->COUNT16.TC_CTRLA |= 0x00000500;
+	TCC3_REGS->COUNT16.TCC_CTRLA |= 0x00000500;
 
 	/*
 	 * Select output-compare sub-mode; classic PWM corresponds to single-
@@ -409,14 +409,15 @@ void TCC_init_early(void) {
 	 * At reset, the TC instance starts in output-compare mode. (How is
 	 * this so?)
 	 */
-	TCC1_REGS->COUNT16.TC_WAVE = 0x02;
+	TCC3_REGS->COUNT16.TCC_WAVE = 0x02;
 
 	//We want a 1000 Hz freq
 
 	// Start at 0% duty cycle (aka. off)
-    TCC1_REGS->COUNT16.TCC_PER = 249;
-	TCC1_REGS->COUNT16.TCC_CC[0] = 0;
-	while ((TC1_REGS->COUNT16.TC_SYNCBUSY & 0x000000A0) != 0) {
+    TCC3_REGS->COUNT16.TCC_PER = 249;
+	TCC3_REGS->COUNT16.TCC_CC[0] = 0;
+    TCC3_REGS->COUNT16.TCC_CC[1] = 0;
+	while ((TCC3_REGS->COUNT16.TCC_SYNCBUSY & 0x000000A0) != 0) {
 		asm("nop");
 	}
 
@@ -440,7 +441,7 @@ void TCC_init_early(void) {
     uint8_t is_on;
 	is_on = PORT_SEC_REGS->GROUP[0].PORT_PMUX[3];
 	is_on &= ~(0xFF);	// Odd --> high 4 bits; Even --> low 4 bits
-	is_on |=  (0x44);	// Function E for odd-numbered channel
+	is_on |=  (0x99);	// Function E for odd-numbered channel
 	PORT_SEC_REGS->GROUP[0].PORT_PMUX[3] = is_on;
 	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[6] |= 0x41; // Enable PMUXEN + DRVSTR
     PORT_SEC_REGS->GROUP[0].PORT_PINCFG[7] |= 0x41;

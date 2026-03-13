@@ -26,37 +26,40 @@ PA07 - PWMB
 
 //See TB6612FNG datasheet for truth table details
 
-void a_stop(void) {
+// Speed variables are to be changed according to calibration.
+int speed = 50;
+
+void b_stop(void) {
     PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 6); //PWM = H
     PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 3); //IN2 = L
     PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 2); //IN1 = L
 }
 
-void b_stop(void) {
+void a_stop(void) {
     PORT_SEC_REGS->GROUP[1].PORT_OUT &= ~(1 << 23); //IN1 = L
     PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 19); //IN2 = L
     PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 7); //PWM = H
 }
 
-void a_cw(void) {
+void b_cw(void) {
     PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 6); //PWM = H
     PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 3); //IN2 = L
     PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 2); // IN1 = H
 }
 
-void b_cw(void) {
+void a_cw(void) {
     PORT_SEC_REGS->GROUP[1].PORT_OUT |= (1 << 23); //IN1 = H
     PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 19); //IN2 = L
     PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 7); //PWM = H
 }
 
-void a_ccw(void) {
+void b_ccw(void) {
     PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 6); // PWM = H
     PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 3); //IN2 = H
     PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 2); //IN1 = L
 }
 
-void b_ccw(void) {
+void a_ccw(void) {
     PORT_SEC_REGS->GROUP[1].PORT_OUT &= ~(1 << 23); //IN1 = L
     PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 19); //IN2 = H
     PORT_SEC_REGS->GROUP[0].PORT_OUT |= (1 << 7); //PWM = H
