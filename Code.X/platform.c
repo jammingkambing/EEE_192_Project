@@ -38,7 +38,7 @@ void platform_init_early(void)
 	// Other early initialization
 	PORT_init_early();
 	EIC_init_early();
-    TC_init_early();
+    TCC_init_early();
 
 	/*
 	 * Configure SysTick
@@ -67,7 +67,7 @@ void platform_init_late(void)
 	 */
     ADC_init();
 	EIC_init_late();
-    TC_init_late();
+    TCC_init_late();
     
     NVIC_SetPriority(SERCOM3_0_IRQn, 3);		// usart.c
 	NVIC_SetPriority(SERCOM3_2_IRQn, 3);		// usart.c
@@ -353,7 +353,7 @@ void EIC_init_early(void)
 	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[1] |= 0x01; // Enable PMUXEN
 }
 
-void TC_init_early(void) {
+void TCC_init_early(void) {
     /*
 	 * =============================================================
 	 * Configure GCLK
@@ -371,7 +371,7 @@ void TC_init_early(void) {
 		// Wait for synchronization
 		asm("nop");
 	}
-
+    // 11/03/26 NOTE: I NEED TO CHANGE THIS!!
 	/*
 	 * =============================================================
 	 * Configure TC itself. First task should be a soft-reset via
@@ -384,38 +384,23 @@ void TC_init_early(void) {
 	 * ENABLE should be set last.
 	 * =============================================================
 	 */
-	TC1_REGS->COUNT16.TC_CTRLA = 0x00000001;
-	while ((TC1_REGS->COUNT16.TC_SYNCBUSY & (1 << 0)) != 0) {
+	TCC1_REGS->TCC_CTRLA = 0x00000001;
+	while ((TCC1_REGS->TCC_SYNCBUSY & (1 << 0)) != 0) {
 		// Wait for synchronization
 		asm("nop");
 	}
-	// TC0_REGS->COUNT16.TC_CTRLA = 0x00000000; // 16-bit mode
 
 	/*
-	 * The human eye can see up to 30 frames per second ("fps", 30 Hz);
-	 * some might even go to 60 fps (60 Hz). To cover all bases, let's'
-	 * use 500 Hz.
-	 *
-	 * WARNING: PWM dimming is inherently a strobe-type operation. If you
-	 *          are sensitive to epilepsy due to fast-changing strobe
-	 *          lighting, please exercise extreme caution when setting the
-	 *          PWM frequency.
-	 *
 	 * To be able to adjust the duty cycle in 1% increments, PER must be
 	 *
 	 * PER + 1 = 100 --> PER = 99
 	 *
-	 * To be able to have f_{pwm}=500 while being able to do the preceding
-	 * adjustments, the minimum prescaled GCLK frequency must be
-	 *
-	 * GCLK_TC0 / (PSC) = (f_{pwm})*(PER+1)
-	 *
-	 * For a 4MHz GCLK_TC0, we get PSC=256.
+	 * Note that we have a 4MHz GCLK_TC0. Our PSC is 64.
 	 * Consequently, the real PWM frequency will be
 	 * 
-	 * (4e6) / (64*(99+1)) = 15625 Hz
+	 * (4e6) / (64*(99+1)) = 625 Hz
 	 */
-	TC1_REGS->COUNT16.TC_CTRLA |= 0x00000400;
+	TCC1_REGS->COUNT16.TC_CTRLA |= 0x00000500;
 
 	/*
 	 * Select output-compare sub-mode; classic PWM corresponds to single-
@@ -424,13 +409,13 @@ void TC_init_early(void) {
 	 * At reset, the TC instance starts in output-compare mode. (How is
 	 * this so?)
 	 */
-	TC1_REGS->COUNT16.TC_WAVE = 0x02;
+	TCC1_REGS->COUNT16.TC_WAVE = 0x02;
 
 	//We want a 1000 Hz freq
 
 	// Start at 0% duty cycle (aka. off)
-    TC1_REGS->COUNT16.TC_PER = 249;
-	TC1_REGS->COUNT16.TC_CC[0] = 0;
+    TCC1_REGS->COUNT16.TCC_PER = 249;
+	TCC1_REGS->COUNT16.TCC_CC[0] = 0;
 	while ((TC1_REGS->COUNT16.TC_SYNCBUSY & 0x000000A0) != 0) {
 		asm("nop");
 	}
@@ -442,27 +427,29 @@ void TC_init_early(void) {
 	 */
 
 	/*
-	 * Reroute PA20 from GPIO to TC1, noting the need for a read-modify-
+	 * Reroute PA06 and PA07 from GPIO to TCC1, noting the need for a read-modify-
 	 * write operation.
 	 *
 	 * NOTE: When a pin is used for PWM, DRVSTR should be set to help
 	 *       overcome parasitic capacitance.
 	 *
-	 * For PA20 (odd), 2n=20 yields n=10. Furthermore, TC1/WO[1] is on
-	 * Function E (cue: device pinout).
+	 * For PA07 (odd), 2n+1=7 yields n=3. For PA06 (even), 2n=6 yields n=3.
+     * PA06 is on TCC1 WO[0]. PA07 is on TCC1 WO[1]. Both are on Function E.
 	 */
     
     uint8_t is_on;
-	is_on = PORT_SEC_REGS->GROUP[0].PORT_PMUX[10];
-	is_on &= ~(0x0F);	// Odd --> high 4 bits; Even --> low 4 bits
-	is_on |=  (0x04);	// Function E for odd-numbered channel
-	PORT_SEC_REGS->GROUP[0].PORT_PMUX[10] = is_on;
-	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[20] |= 0x41; // Enable PMUXEN + DRVSTR
+	is_on = PORT_SEC_REGS->GROUP[0].PORT_PMUX[3];
+	is_on &= ~(0xFF);	// Odd --> high 4 bits; Even --> low 4 bits
+	is_on |=  (0x44);	// Function E for odd-numbered channel
+	PORT_SEC_REGS->GROUP[0].PORT_PMUX[3] = is_on;
+	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[6] |= 0x41; // Enable PMUXEN + DRVSTR
+    PORT_SEC_REGS->GROUP[0].PORT_PINCFG[7] |= 0x41;
+    
 }
 
-void TC_init_late(void) {
-    TC1_REGS->COUNT16.TC_CTRLA |= 0x00000002;
-	while ((TC1_REGS->COUNT16.TC_SYNCBUSY & 0x00000002) != 0) {
+void TCC_init_late(void) {
+    TCC1_REGS->COUNT16.TCC_CTRLA |= 0x00000002;
+	while ((TCC1_REGS->COUNT16.TCC_SYNCBUSY & 0x00000002) != 0) {
 		asm("nop");
 	}
 }
