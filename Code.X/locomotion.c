@@ -66,14 +66,14 @@ void stop(void) {
 
 void turn_right(void) {
     PORT_SEC_REGS->GROUP[1].PORT_OUT |= (1 << 3); //STANDBY = H
-    a_stop();
+    a_cw();
     b_ccw();
 }
 
 void turn_left(void) {
     PORT_SEC_REGS->GROUP[1].PORT_OUT |= (1 << 3); //STANDBY = H
     a_ccw();
-    b_stop();
+    b_cw();
 }
 
 void go_forward(void) {

@@ -41,12 +41,22 @@ static const char banner_msg[] =
 "\r\n"
 "Speed: "
 "\r\n"
-"Mode: ";
+"Mode: "
+"\r\n"
+"Ultrasonic sensor data:     LEFT:      CENTER:         RIGHT: "
+"\r\n"
+"Infrared sensor data:       LEFT:      CENTER:         RIGHT: ";
 
 // Escape sequence prepended to the start of the sequence display
 #define ESC_SEQ_BLINKMODE "\033[14;20H\033[0K"
 #define ESC_SEQ_BRIGHTNESS "\033[15;20H\033[0K"
 #define ESC_SEQ_MESSAGE "\033[16;20H\033[0K"
+#define ESC_SEQ_US_LEFT "\033[17;34H\033[0K"
+#define ESC_SEQ_IR_LEFT "\033[18;34H\033[0K"
+#define ESC_SEQ_US_CENTER "\033[17;47H\033[0K"
+#define ESC_SEQ_IR_CENTER "\033[18;47H\033[0K"
+#define ESC_SEQ_US_CENTER "\033[17;47H\033[0K"
+#define ESC_SEQ_IR_CENTER "\033[18;47H\033[0K"
 
 
 // List of color schemes...
@@ -183,8 +193,8 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
 
         switch (speed) {
             case 0:
-            ps->tx_desc[ps->tx_nr_desc].buf = "no fast";
-            ps->tx_desc[ps->tx_nr_desc].len = 7;
+            ps->tx_desc[ps->tx_nr_desc].buf = "okay lang";
+            ps->tx_desc[ps->tx_nr_desc].len = 9;
             break;
             case 1:
             ps->tx_desc[ps->tx_nr_desc].buf = "medyo fast";
@@ -382,12 +392,12 @@ int main(void) {
            case 1:
                go_forward();
                a_speed = 50;
-               b_speed = 50;
+               b_speed = 35;
                break;
            case 2: 
                go_backward();
                a_speed = 50;
-               b_speed = 50;
+               b_speed = 35;
                break;
            case 3: 
                turn_right();
