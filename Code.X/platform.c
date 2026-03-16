@@ -204,11 +204,11 @@ void do_raise_perf_level(void)
 // Configure port I/O here; do not enable PMUXEN yet
 void PORT_init_early(void)
 {
-    // PA00: Input Latch SW3
+    // PA00: Input F_TRIG
     PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 0);
 	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[0] = 0x02;
     
-    // PA01: Input Latch SW4
+    // PA01: Input F_ECHO
     PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 1);
 	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[1] = 0x02;
     
@@ -216,7 +216,7 @@ void PORT_init_early(void)
 	PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 2);
 	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 2);
     
-    // PA03: Active-HI Output, RED LED
+    // PA03: Active-HI Output
 	PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 3);
 	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 3);
     
@@ -228,9 +228,17 @@ void PORT_init_early(void)
 	PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 7);
 	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 7);
     
-	// PA20: Active-HI Output, DRV.STEP
-    PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 20);
-	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 20);
+    // PA09: Input R_D0
+    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 9);
+	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[9] = 0x02;
+    
+    // PA10: Input C_D0
+    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 10);
+	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[10] = 0x02;
+    
+    // PA11: Input C_D0
+    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 11);
+	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[11] = 0x02;
     
     // PA14: Active-HI Output, DRV.DIR
     PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 14);
@@ -243,6 +251,26 @@ void PORT_init_early(void)
     // PA15: Active-HI Output
     PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 19);
 	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 19);
+    
+    // PA17: Input R_TRIG
+    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 17);
+	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[17] = 0x02;
+    
+    // PA18: Input R_ECHO
+    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 18);
+	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[18] = 0x02;
+    
+    // PA20: Active-HI Output, SOS_LED
+    PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 20);
+	PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 20);
+    
+    // PA21: Input R_TRIG
+    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 21);
+	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[21] = 0x02;
+    
+    // PA22: Input R_ECHO
+    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 22);
+	PORT_SEC_REGS->GROUP[0].PORT_PINCFG[22] = 0x02;
     
     // PA23: Active-LO Push Button
     PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 23);

@@ -325,6 +325,7 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 int main(void) {
     
     int a_speed, b_speed = 0;
+    int line_left, line_center, line_right = 0;
     
     struct {
 		unsigned int sweep;
@@ -341,6 +342,27 @@ int main(void) {
     idx_message = 0;
     
     for (;;) {
+        
+       if ((PORT_SEC_REGS->GROUP[0].PORT_IN & (1 << 9)) == 1) {
+           line_right = 1;
+       }
+       else {
+           line_right = 0;
+       }
+       
+       if ((PORT_SEC_REGS->GROUP[0].PORT_IN & (1 << 10)) == 1) {
+           line_center = 1;
+       }
+       else {
+           line_center = 0;
+       }
+       
+       if ((PORT_SEC_REGS->GROUP[0].PORT_IN & (1 << 11)) == 1) {
+           line_right = 1;
+       }
+       else {
+           line_right = 0;
+       }
       
        ts_curr = platform_systick_count();
        ts_delta = platform_tick_delta(ts_curr, tick_ctrs.sweep);

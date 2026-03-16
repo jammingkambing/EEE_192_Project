@@ -16,9 +16,11 @@
 #include <limits.h>
 
 #define PLATFORM_EVT_ALL (PLATFORM_EVT_SW1_PRESS)
-volatile int trip = 0;
+
+volatile int line_left = 0;
+volatile int line_center = 0;
+volatile int line_right = 0;
 static volatile int evt_flags = 0;
-volatile int stepper = 0;
 static volatile int tick_ctr = 0;
 typedef struct prog_state_type
 {
@@ -98,10 +100,7 @@ void __attribute__((interrupt)) EIC_EXTINT_0_Handler(void)
 {
 	// ISR body here. Keep it short and simple!
 	if ((EIC_SEC_REGS->EIC_INTFLAG & (1 << 0)) != 0) {
-		stepper = 0;
-		
 
-		// EDIT MO TOH
 		EIC_SEC_REGS->EIC_INTFLAG |= (1 << 0);
 	}
 }
@@ -111,10 +110,7 @@ void __attribute__((interrupt)) EIC_EXTINT_1_Handler(void)
 {
 	// ISR body here. Keep it short and simple!
 	if ((EIC_SEC_REGS->EIC_INTFLAG & (1 << 1)) != 0) {
-		stepper = 1;
-		
 
-		// EDIT MO TOH
 		EIC_SEC_REGS->EIC_INTFLAG |= (1 << 1);
 	}
 }
@@ -123,9 +119,7 @@ void __attribute__((interrupt)) EIC_EXTINT_2_Handler(void)
 {
 	// ISR body here. Keep it short and simple!
 	if ((EIC_SEC_REGS->EIC_INTFLAG & (1 << 2)) != 0) {
-		// EXTINT_2 was signaled; configured for falling-edge only
-        trip = 1;
-		ps.tx_flags |= 0x0002;
+
 		EIC_SEC_REGS->EIC_INTFLAG |= (1 << 2);
 	}
 }
@@ -135,7 +129,6 @@ void __attribute__((interrupt)) EIC_EXTINT_6_Handler(void)
 	// ISR body here. Keep it short and simple!
 	if ((EIC_SEC_REGS->EIC_INTFLAG & (1 << 6)) != 0) {
 		// EXTINT_2 was signaled; configured for falling-edge only
-		trip = 0;
         ps.tx_flags |= 0x0002;
 		// EDIT MO TOH
 		EIC_SEC_REGS->EIC_INTFLAG |= (1 << 6);
