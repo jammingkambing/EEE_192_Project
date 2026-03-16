@@ -27,7 +27,6 @@ PA07 - PWMB
 //See TB6612FNG datasheet for truth table details
 
 // Speed variables are to be changed according to calibration.
-int speed = 50;
 
 void b_stop(void) {
     PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 3); //IN2 = L

@@ -398,9 +398,9 @@ void TCC_init_early(void) {
 	 * Note that we have a 4MHz GCLK_TC0. Our PSC is 64.
 	 * Consequently, the real PWM frequency will be
 	 * 
-	 * (4e6) / (64*(99+1)) = 625 Hz
+	 * (4e6) / (16*(99+1)) = 2.5 kHz
 	 */
-	TCC3_REGS->COUNT16.TCC_CTRLA |= 0x00000500;
+	TCC3_REGS->TCC_CTRLA |= 0x00000400;
 
 	/*
 	 * Select output-compare sub-mode; classic PWM corresponds to single-
@@ -409,15 +409,13 @@ void TCC_init_early(void) {
 	 * At reset, the TC instance starts in output-compare mode. (How is
 	 * this so?)
 	 */
-	TCC3_REGS->COUNT16.TCC_WAVE = 0x02;
-
-	//We want a 1000 Hz freq
+	TCC3_REGS->TCC_WAVE = 0x02;
 
 	// Start at 0% duty cycle (aka. off)
-    TCC3_REGS->COUNT16.TCC_PER = 249;
-	TCC3_REGS->COUNT16.TCC_CC[0] = 0;
-    TCC3_REGS->COUNT16.TCC_CC[1] = 0;
-	while ((TCC3_REGS->COUNT16.TCC_SYNCBUSY & 0x000000A0) != 0) {
+    TCC3_REGS->TCC_PER = 99;
+	TCC3_REGS->TCC_CC[0] = 0;
+    TCC3_REGS->TCC_CC[1] = 0;
+	while ((TCC3_REGS->TCC_SYNCBUSY & 0x000000A0) != 0) {
 		asm("nop");
 	}
 
@@ -438,7 +436,7 @@ void TCC_init_early(void) {
      * PA06 is on TCC1 WO[0]. PA07 is on TCC1 WO[1]. Both are on Function E.
 	 */
     
-    uint8_t is_on;
+    int is_on;
 	is_on = PORT_SEC_REGS->GROUP[0].PORT_PMUX[3];
 	is_on &= ~(0xFF);	// Odd --> high 4 bits; Even --> low 4 bits
 	is_on |=  (0x99);	// Function E for odd-numbered channel
@@ -449,8 +447,8 @@ void TCC_init_early(void) {
 }
 
 void TCC_init_late(void) {
-    TCC1_REGS->COUNT16.TCC_CTRLA |= 0x00000002;
-	while ((TCC1_REGS->COUNT16.TCC_SYNCBUSY & 0x00000002) != 0) {
+    TCC3_REGS->TCC_CTRLA |= 0x00000002;
+	while ((TCC3_REGS->TCC_SYNCBUSY & 0x00000002) != 0) {
 		asm("nop");
 	}
 }

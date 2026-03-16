@@ -324,6 +324,8 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 
 int main(void) {
     
+    int a_speed, b_speed = 0;
+    
     struct {
 		unsigned int sweep;
 	} tick_ctrs;
@@ -357,23 +359,30 @@ int main(void) {
                break;
            case 1:
                go_forward();
+               a_speed = 50;
+               b_speed = 50;
                break;
            case 2: 
                go_backward();
+               a_speed = 50;
+               b_speed = 50;
                break;
            case 3: 
                turn_right();
+               a_speed = 50;
+               b_speed = 50;
                break;
            case 4: 
                turn_left();
+               a_speed = 50;
+               b_speed = 50;
                break;
        }
        
        // I'm gonna have to figure out the logic for this... disgusting
        if ((TCC3_REGS->TCC_SYNCBUSY & 0x00000080) == 0) {
-                TCC3_REGS->TCC_CCBUF[1] = red*brightness;
-                TCC3_REGS->TCC_CCBUF[0] = green*brightness;
-                TCC3_REGS->TCC_CCBUF[3] = blue*brightness;
+                TCC3_REGS->TCC_CCBUF[1] = a_speed;
+                TCC3_REGS->TCC_CCBUF[0] = b_speed;
 	}
         
     }
