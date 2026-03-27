@@ -17,8 +17,8 @@ extern int trip;
 extern int stepper;
 volatile int idx_message;
 
-int step_per;
 int speed;
+bool us_left_status, us_center_status, us_right_status, ir_left_status, ir_center_status, ir_right_status;
 int setting = 0;
 char setting_ptr[9];
 
@@ -55,8 +55,8 @@ static const char banner_msg[] =
 #define ESC_SEQ_IR_LEFT "\033[18;34H\033[0K"
 #define ESC_SEQ_US_CENTER "\033[17;47H\033[0K"
 #define ESC_SEQ_IR_CENTER "\033[18;47H\033[0K"
-#define ESC_SEQ_US_CENTER "\033[17;47H\033[0K"
-#define ESC_SEQ_IR_CENTER "\033[18;47H\033[0K"
+#define ESC_SEQ_US_RIGHT "\033[17;60H\033[0K"
+#define ESC_SEQ_IR_RIGHT "\033[18;60H\033[0K"
 
 
 // List of color schemes...
@@ -113,8 +113,6 @@ typedef struct prog_state_type
 } prog_state_t;
 
 prog_state_t ps;
-
-
 
 // Main-loop task handling data transmission
 static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
@@ -226,7 +224,48 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
             
         }
         ps->tx_nr_desc += 1;
-
+        
+        ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_IR_LEFT;
+		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_MESSAGE)-1;
+        ps->tx_nr_desc += 1;
+        
+        if (ir_left_status) {
+            ps->tx_desc[ps->tx_nr_desc].buf = "DETECTED";
+            ps->tx_desc[ps->tx_nr_desc].len = 8;
+        }
+        else {
+            ps->tx_desc[ps->tx_nr_desc].buf = "NONE";
+            ps->tx_desc[ps->tx_nr_desc].len = 4;
+        }
+        ps->tx_nr_desc += 1;
+        
+        ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_IR_CENTER;
+		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_MESSAGE)-1;
+        ps->tx_nr_desc += 1;
+        
+        if (ir_center_status) {
+            ps->tx_desc[ps->tx_nr_desc].buf = "DETECTED";
+            ps->tx_desc[ps->tx_nr_desc].len = 8;
+        }
+        else {
+            ps->tx_desc[ps->tx_nr_desc].buf = "NONE";
+            ps->tx_desc[ps->tx_nr_desc].len = 4;
+        }
+        ps->tx_nr_desc += 1;
+        
+        ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_IR_RIGHT;
+		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_MESSAGE)-1;
+        ps->tx_nr_desc += 1;
+        
+        if (ir_right_status) {
+            ps->tx_desc[ps->tx_nr_desc].buf = "DETECTED";
+            ps->tx_desc[ps->tx_nr_desc].len = 8;
+        }
+        else {
+            ps->tx_desc[ps->tx_nr_desc].buf = "NONE";
+            ps->tx_desc[ps->tx_nr_desc].len = 4;
+        }
+        ps->tx_nr_desc += 1;
 	}
 
 	// Enqueue them for transmission
@@ -335,7 +374,6 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 int main(void) {
     
     int a_speed, b_speed = 0;
-    int line_left, line_center, line_right = 0;
     
     struct {
 		unsigned int sweep;
@@ -352,34 +390,17 @@ int main(void) {
     idx_message = 0;
     
     for (;;) {
-        
-       if ((PORT_SEC_REGS->GROUP[0].PORT_IN & (1 << 9)) == 1) {
-           line_right = 1;
-       }
-       else {
-           line_right = 0;
-       }
-       
-       if ((PORT_SEC_REGS->GROUP[0].PORT_IN & (1 << 10)) == 1) {
-           line_center = 1;
-       }
-       else {
-           line_center = 0;
-       }
-       
-       if ((PORT_SEC_REGS->GROUP[0].PORT_IN & (1 << 11)) == 1) {
-           line_right = 1;
-       }
-       else {
-           line_right = 0;
-       }
       
+       ir_left_status = ir_left();
+       ir_center_status = ir_center();
+       ir_right_status = ir_right();
+        
        ts_curr = platform_systick_count();
        ts_delta = platform_tick_delta(ts_curr, tick_ctrs.sweep);
        
        prog_loop_do_one_tx(&ps, idx_message);
        prog_loop_do_one_rx(&ps);
-       
+         
         if (ts_delta >= (20/PLATFORM_TICK_MS)) {
 //          // At least 20 ms have elapsed
             tick_ctrs.sweep = ts_curr;
