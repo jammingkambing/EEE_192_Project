@@ -2,7 +2,7 @@
  * @file main.h
  *
  * Initial version:  EEE 158 AY2025-26 Sem 1 Handlers
- * Modifications by: <Insert name, section, student number here>
+ * Modifications by: Jam Eclarin
  *
  * Prototypes for functions defined in platform.c and irq_handlers.c,
  * and called from main.c
@@ -113,6 +113,16 @@ extern "C" {
     extern void go_forward(void);
     extern void go_backward(void);
     extern void stop(void);
+    
+    /**
+	 * For sensor checking
+         */
+    extern bool us_left(void);
+    extern bool us_center(void);
+    extern bool us_right(void);
+    extern bool ir_left(void);
+    extern bool ir_center(void);
+    extern bool ir_center(void);
 	
 	/**
 	 * Get available platform-event flags
