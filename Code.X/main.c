@@ -404,6 +404,7 @@ int main(void) {
        
        //Execute wall-following algorithm
        // I was here or something
+       // Jamjam
        ts_curr = platform_systick_count();
        ts_delta = platform_tick_delta(ts_curr, tick_ctrs.sweep);
        
