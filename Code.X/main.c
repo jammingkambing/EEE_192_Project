@@ -398,6 +398,7 @@ int main(void) {
         
        
        // Execute line-following algorithm
+       // Hello
        line_following_algorithm(ir_left_status, ir_center_status, ir_right_status);
        
        //Execute wall-following algorithm
