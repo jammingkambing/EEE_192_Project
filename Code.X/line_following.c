@@ -16,7 +16,7 @@
 /*
  * 
  */
-void line_following_algorithm(void) {
+void line_following_algorithm(bool left, bool center, bool right) {
     
 }
 
