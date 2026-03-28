@@ -391,10 +391,15 @@ int main(void) {
     
     for (;;) {
       
+       // TAKE SENSOR INFORMATION
        ir_left_status = ir_left();
        ir_center_status = ir_center();
        ir_right_status = ir_right();
         
+       
+       // Execute line-following algorithm
+       line_following_algorithm(ir_left_status, ir_center_status, ir_right_status);
+       
        ts_curr = platform_systick_count();
        ts_delta = platform_tick_delta(ts_curr, tick_ctrs.sweep);
        
