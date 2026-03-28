@@ -396,6 +396,7 @@ int main(void) {
        ir_center_status = ir_center();
        ir_right_status = ir_right();
         
+       us_left_status = us_left();
        
        // Execute line-following algorithm
        line_following_algorithm(ir_left_status, ir_center_status, ir_right_status);
