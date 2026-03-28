@@ -403,7 +403,7 @@ int main(void) {
        line_following_algorithm(ir_left_status, ir_center_status, ir_right_status);
        
        //Execute wall-following algorithm
-       
+       // I was here or something
        ts_curr = platform_systick_count();
        ts_delta = platform_tick_delta(ts_curr, tick_ctrs.sweep);
        
