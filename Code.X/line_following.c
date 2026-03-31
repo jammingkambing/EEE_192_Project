@@ -19,6 +19,7 @@
 #define MAX_SPEED 100
 #define MIN_SPEED 0
 
+// change this if hindi pa din stable 
 #define KP 25
 #define KI 5
 #define KD 10
@@ -78,7 +79,7 @@ void line_following_algorithm(bool left, bool center, bool right) {
         return;
     }
     
-    int integral += error;            
+    integral += error;            
     int derivative = error - last_error;
     int correction = KP*error + KI*integral + KD*derivative;
     
@@ -102,3 +103,10 @@ void line_following_algorithm(bool left, bool center, bool right) {
     last_error = error;
 }
 
+
+
+// To Update:  
+//       - handling of 1 1 1 case (add delay to stop then choose path)
+//       - line lost: use timer to recover the line (para maiwasan spin)
+//                  Ex. turn left for 200ms, check status ng sensor then turn right/center if still lost
+//       - test code
