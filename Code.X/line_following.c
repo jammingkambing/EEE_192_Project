@@ -24,15 +24,21 @@
 #define KI 5
 #define KD 10
 
+#define INTEGRAL_LIMIT 100
+#define SEARCH_TIME 150   // ms
+#define INTERSECTION_DELAY 150 // ms
+
 static int last_error = 0;
 static int integral = 0;
 
 void line_following_algorithm(bool left, bool center, bool right) {
     int error = 0;
     
-    // not final pa since special case
     // Intersection (1 1 1)
     if(left && center && right){
+        stop();
+        __delay_ms(INTERSECTION_DELAY);
+        
         go_forward();
         set_a_speed(BASE_SPEED);
         set_b_speed(BASE_SPEED);
@@ -56,30 +62,47 @@ void line_following_algorithm(bool left, bool center, bool right) {
     
     // Normal Tracking
     if (left)
-        error -= 1;
+        error -= 2;
+    
+    if (center)
+        error += 0;
     
     if (right)
-        error += 1;
+        error += 2;
     
     // Line Lost
     if(!left && !center && !right){
-        if (last_error < 0) {
-            turn_left();
-            set_a_speed(TURN_SPEED);
-            set_b_speed(TURN_SPEED);
-        } else if(last_error > 0){
-            turn_right();
-            set_a_speed(TURN_SPEED);
-            set_b_speed(TURN_SPEED);
-        } else {
-            go_forward();
-            set_a_speed(TURN_SPEED);
-            set_b_speed(TURN_SPEED);
-        }
+        // search left first
+        turn_left();
+        set_a_speed(TURN_SPEED);
+        set_b_speed(TURN_SPEED);
+        __delay_ms(SEARCH_TIME);
+        
+        if (left || center || right)
+            return;
+        
+        // search right
+        turn_right();
+        set_a_speed(TURN_SPEED);
+        set_b_speed(TURN_SPEED);
+        __delay_ms(SEARCH_TIME);
+
+        if(left || center || right)
+            return;
+        
+        // move forward
+        go_forward();
+        set_a_speed(TURN_SPEED);
+        set_b_speed(TURN_SPEED);
         return;
     }
     
-    integral += error;            
+    integral += error;      
+    if(integral > INTEGRAL_LIMIT)
+        integral = INTEGRAL_LIMIT;
+    if(integral < -INTEGRAL_LIMIT)
+        integral = -INTEGRAL_LIMIT;
+    
     int derivative = error - last_error;
     int correction = KP*error + KI*integral + KD*derivative;
     
