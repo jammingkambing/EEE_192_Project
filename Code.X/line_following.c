@@ -36,6 +36,8 @@ void line_following_algorithm(bool left, bool center, bool right) {
     
     // Intersection (1 1 1)
     if(left && center && right){
+        
+        integral = 0;
         stop();
         __delay_ms(INTERSECTION_DELAY);
         
@@ -47,36 +49,38 @@ void line_following_algorithm(bool left, bool center, bool right) {
     
     // Special Case (1 0 1)
     if(left && !center && right){
+        
+        integral = 0;
+        
         // Choose left or right based on previous error
         if(last_error <= 0){ 
             turn_left();
             set_a_speed(TURN_SPEED);
             set_b_speed(BASE_SPEED);
+            last_error = -2;
         } else { 
             turn_right();
             set_a_speed(BASE_SPEED);
             set_b_speed(TURN_SPEED);
+            last_error = 2;
         }
         return;
     }
     
-    // Normal Tracking
-    if (left)
-        error -= 2;
-    
-    if (center)
-        error += 0;
-    
-    if (right)
-        error += 2;
-    
     // Line Lost
     if(!left && !center && !right){
+        
+        integral = 0;
         // search left first
         turn_left();
         set_a_speed(TURN_SPEED);
         set_b_speed(TURN_SPEED);
         __delay_ms(SEARCH_TIME);
+        
+        // read sensors again
+        left = ir_left();
+        center = ir_center();
+        right = ir_right();
         
         if (left || center || right)
             return;
@@ -86,6 +90,11 @@ void line_following_algorithm(bool left, bool center, bool right) {
         set_a_speed(TURN_SPEED);
         set_b_speed(TURN_SPEED);
         __delay_ms(SEARCH_TIME);
+        
+        // read sensors again
+        left = ir_left();
+        center = ir_center();
+        right = ir_right();
 
         if(left || center || right)
             return;
@@ -96,6 +105,13 @@ void line_following_algorithm(bool left, bool center, bool right) {
         set_b_speed(TURN_SPEED);
         return;
     }
+    
+    // Normal Tracking
+    if (left)
+        error -= 2;
+    
+    if (right)
+        error += 2;
     
     integral += error;      
     if(integral > INTEGRAL_LIMIT)
@@ -125,11 +141,3 @@ void line_following_algorithm(bool left, bool center, bool right) {
 
     last_error = error;
 }
-
-
-
-// To Update:  
-//       - handling of 1 1 1 case (add delay to stop then choose path)
-//       - line lost: use timer to recover the line (para maiwasan spin)
-//                  Ex. turn left for 200ms, check status ng sensor then turn right/center if still lost
-//       - test code
