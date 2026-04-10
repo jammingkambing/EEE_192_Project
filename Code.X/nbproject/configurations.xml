@@ -250,6 +250,8 @@
       <Tool>
         <property key="debugoptions.useswbreakpoints" value="true"/>
       </Tool>
+      <item path="line_following.c" ex="true" overriding="false">
+      </item>
       <nEdbgTool>
         <property key="debugoptions.useswbreakpoints" value="true"/>
       </nEdbgTool>

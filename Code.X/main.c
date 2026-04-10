@@ -43,20 +43,30 @@ static const char banner_msg[] =
 "\r\n"
 "Mode: "
 "\r\n"
-"Ultrasonic sensor data:     LEFT:      CENTER:         RIGHT: "
 "\r\n"
-"Infrared sensor data:       LEFT:      CENTER:         RIGHT: ";
+"Infrared left:        "
+"\r\n"
+"Infrared center:       "
+"\r\n"
+"Infrared right:        "
+"\r\n"
+"\r\n"
+"Ultrasonic left:        "
+"\r\n"
+"Ultrasonic center:       "
+"\r\n"
+"Ultrasonic right:        ";
 
 // Escape sequence prepended to the start of the sequence display
 #define ESC_SEQ_BLINKMODE "\033[14;20H\033[0K"
 #define ESC_SEQ_BRIGHTNESS "\033[15;20H\033[0K"
 #define ESC_SEQ_MESSAGE "\033[16;20H\033[0K"
-#define ESC_SEQ_US_LEFT "\033[17;34H\033[0K"
+#define ESC_SEQ_US_LEFT "\033[22;34H\033[0K"
 #define ESC_SEQ_IR_LEFT "\033[18;34H\033[0K"
-#define ESC_SEQ_US_CENTER "\033[17;47H\033[0K"
-#define ESC_SEQ_IR_CENTER "\033[18;47H\033[0K"
-#define ESC_SEQ_US_RIGHT "\033[17;60H\033[0K"
-#define ESC_SEQ_IR_RIGHT "\033[18;60H\033[0K"
+#define ESC_SEQ_US_CENTER "\033[23;34H\033[0K"
+#define ESC_SEQ_IR_CENTER "\033[19;34H\033[0K"
+#define ESC_SEQ_US_RIGHT "\033[24;34H\033[0K"
+#define ESC_SEQ_IR_RIGHT "\033[20;34H\033[0K"
 
 
 // List of color schemes...
@@ -100,7 +110,7 @@ typedef struct prog_state_type
 	unsigned int state_id;
 	
 	// Transmit stuff
-	struct platform_ro_buf_desc tx_desc[12];
+	struct platform_ro_buf_desc tx_desc[30];
 	uint16_t tx_nr_desc;
 	char	tx_buf[60];
 	unsigned int tx_buf_len;
