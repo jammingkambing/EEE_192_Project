@@ -3,10 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Zea/Documents/Github/EEE_192_Project/Code.X/check_sensors.c</file>
-            <file>file:/C:/Users/Zea/Documents/Github/EEE_192_Project/Code.X/line_following.c</file>
-            <file>file:/C:/Users/Zea/Documents/Github/EEE_192_Project/Code.X/locomotion.c</file>
-            <file>file:/C:/Users/Zea/Documents/Github/EEE_192_Project/Code.X/main.c</file>
+            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/wall_following.c</file>
+            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/usart.c</file>
+            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/platform.c</file>
+            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/main.h</file>
+            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/usart.h</file>
+            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/locomotion.c</file>
+            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/wireless.c</file>
+            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/main.c</file>
+            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/init.h</file>
+            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/eee158_hplib.h</file>
+            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/line_following.c</file>
+            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/irq_handlers.c</file>
+            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/check_sensors.c</file>
         </group>
     </open-files>
 </project-private>

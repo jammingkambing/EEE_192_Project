@@ -397,13 +397,16 @@ int main(void) {
        ir_right_status = ir_right();
         
        us_left_status = us_left();
+       us_right_status = us_right();
+       us_center_status = us_center();
        
        // Execute line-following algorithm
-       line_following_algorithm(ir_left_status, ir_center_status, ir_right_status);
+       //line_following_algorithm(ir_left_status, ir_center_status, ir_right_status);
        
        //Execute wall-following algorithm
        // I was here or something
        // Jamjam
+       
        ts_curr = platform_systick_count();
        ts_delta = platform_tick_delta(ts_curr, tick_ctrs.sweep);
        

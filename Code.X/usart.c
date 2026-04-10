@@ -179,7 +179,7 @@ void platform_usart_cdc_init(void)
 	 * error rate.
 	 */
 	SERCOM_CDC_REGS->SERCOM_BAUD = 50437;	// 38400 baud
-
+    // Note that the actual baud is 57600
 	/*
 	 * Third-to-the-last setup:
 	 *

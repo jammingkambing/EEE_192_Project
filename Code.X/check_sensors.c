@@ -27,20 +27,15 @@
  */
 
 bool us_left(void){
-    if ((PORT_SEC_REGS->GROUP[0].PORT_IN & (1 << 11)) == 0) {
-        return false;
-    }
-    else {
-        return true;
-    }
+    return false;
 }
 
 bool us_center(void) {
-    
+    return false;
 }
 
 bool us_right(void) {
-    
+    return false;
 }
 
 bool ir_left(void) {
