@@ -87,3 +87,17 @@ void go_backward(void) {
     a_cw();
     b_cw();
 }
+
+void set_a_speed(int speed) {
+    if(speed < 0) speed = 0;
+    if(speed > 100) speed = 100;
+    a_speed = speed;
+    // // PWM_A_REG = speed;  (Replace with actual PWM output registers for PA06)
+}
+
+void set_b_speed(int speed) {
+    if(speed < 0) speed = 0;
+    if(speed > 100) speed = 100;
+    b_speed = speed;
+    // PWM_B_REG = speed;  (Replace with actual PWM output registers for PA07)
+}
