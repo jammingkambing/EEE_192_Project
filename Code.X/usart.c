@@ -135,7 +135,7 @@ void platform_usart_cdc_init(void)
 	 *
 	 * - LSB first
 	 * - Even parity
-	 * - Two stop bits
+	 * - One stop bit
 	 * - 8-bit character size
 	 * - No break detection
 	 * - With FIFO, 32-bit extensions disabled
@@ -149,8 +149,8 @@ void platform_usart_cdc_init(void)
 	 *       as they will only clear when the buffer is empty and filled,
 	 *       respectively.
 	 */
-	SERCOM_CDC_REGS->SERCOM_CTRLA |= 0x01100000;
-	SERCOM_CDC_REGS->SERCOM_CTRLB  = 0x00000040;
+	SERCOM_CDC_REGS->SERCOM_CTRLA |= 0x00100000;
+	SERCOM_CDC_REGS->SERCOM_CTRLB  = 0x00000000;
 	SERCOM_CDC_REGS->SERCOM_CTRLC  = 0x08000000;
 
 	/*
@@ -178,8 +178,7 @@ void platform_usart_cdc_init(void)
 	 * the closest one should be selected to minimize the resulting bit-
 	 * error rate.
 	 */
-	SERCOM_CDC_REGS->SERCOM_BAUD = 50437;	// 38400 baud
-    // Note that the actual baud is 57600
+	SERCOM_CDC_REGS->SERCOM_BAUD = 63019;	// 9600 baud
 	/*
 	 * Third-to-the-last setup:
 	 *
