@@ -131,7 +131,7 @@ extern "C" {
 	
 	/// Number of milliseconds corresponding to one SysTick occurrence
 
-
+    extern uint32_t platform_systick_count(void);
 
 	// ==================================================================
 #ifdef __cplusplus
