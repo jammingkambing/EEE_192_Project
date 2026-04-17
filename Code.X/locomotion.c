@@ -13,6 +13,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+static int a_speed = 0;
+static int b_speed = 0;
+
 /*For reference: 
  * Motor driver pins:
 PA06 - PWMA
@@ -93,6 +96,7 @@ void set_a_speed(int speed) {
     if(speed > 100) speed = 100;
     a_speed = speed;
     // // PWM_A_REG = speed;  (Replace with actual PWM output registers for PA06)
+    //TCC3_REGS->TCC_CCBUF[0] = speed; //(temporary)
 }
 
 void set_b_speed(int speed) {
@@ -100,4 +104,5 @@ void set_b_speed(int speed) {
     if(speed > 100) speed = 100;
     b_speed = speed;
     // PWM_B_REG = speed;  (Replace with actual PWM output registers for PA07)
+    //TCC3_REGS->TCC_CCBUF[1] = speed; // (temporary)
 }
