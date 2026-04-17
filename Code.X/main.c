@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <string.h>
+
 extern int trip;
 extern int stepper;
 volatile int idx_message;
@@ -71,6 +73,10 @@ static const struct platform_ro_buf_desc color_schem[] = { // These are SGR colo
     {"\033[30;47m", 8},
 };
 #define NR_COLOR_SCHEM (8)
+
+
+//declare wall_following
+void wall_following_algorithm(void);
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -407,6 +413,18 @@ int main(void) {
        line_following_algorithm(ir_left_status, ir_center_status, ir_right_status);
        
        //Execute wall-following algorithm
+       //wall_following_algorithm();
+       
+       
+       // if-else for both line & wall algorithms LATER
+       
+       //if (idx_message == 0) {
+       //    line_following_algorithm(ir_left_status, ir_center_status, ir_right_status);
+       //} else {
+       //    wall_following_algorithm();
+       //}
+       
+       
        // I was here or something
        // Jamjam
        ts_curr = platform_systick_count();
