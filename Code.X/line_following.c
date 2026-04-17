@@ -13,20 +13,20 @@
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
- 
-#define BASE_SPEED 60
-#define TURN_SPEED 40
+
+#define BASE_SPEED 65
+#define TURN_SPEED 45
 #define MAX_SPEED 100
-#define MIN_SPEED 0
+#define MIN_SPEED 30
 
-// change this if hindi pa din stable 
-#define KP 25
-#define KI 5
-#define KD 10
+// not verified
+#define KP 22
+#define KI 3
+#define KD 12
 
-#define INTEGRAL_LIMIT 100
-#define SEARCH_TIME 150   // ms
-#define INTERSECTION_DELAY 150 // ms
+#define INTEGRAL_LIMIT 80
+#define SEARCH_TIME 120
+#define INTERSECTION_DELAY 120
 
 static int last_error = 0;
 static int integral = 0;
@@ -59,9 +59,6 @@ void line_following_algorithm(bool left, bool center, bool right)
             return;
         }
     }
-    
-    // Two Path (1 0 1)
-    
     
     // Line Lost
     if(!left && !center && !right)
