@@ -29,7 +29,7 @@
       <itemPath>wireless.c</itemPath>
       <itemPath>check_sensors.c</itemPath>
       <itemPath>wall_following.c</itemPath>
-      <itemPath>line_following.c</itemPath>
+      <itemPath>locomotion.h</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
