@@ -1,13 +1,13 @@
 Archive member included to satisfy reference by file (symbol)
 
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
-                              C:\Users\Jami\AppData\Local\Temp\cciKxNCD.o (__pic32c_data_initialization)
+                              C:\Users\Jami\AppData\Local\Temp\ccAfNhKh.o (__pic32c_data_initialization)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
                               build/default/production/main.o (memcmp)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memset.o)
                               build/default/production/usart.o (memset)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-musl.a(__libc_start_main.o)
-                              C:\Users\Jami\AppData\Local\Temp\cciKxNCD.o (__libc_init_array)
+                              C:\Users\Jami\AppData\Local\Temp\ccAfNhKh.o (__libc_init_array)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-musl.a(libc.o)
                               c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-musl.a(__libc_start_main.o) (__progname_full)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-musl.a(__environ.o)
@@ -85,7 +85,7 @@ Microchip PIC32 Memory-Usage Report By Module
         2120           0         168        2288         8f0    usart.o                build/default/production/usart.o
          616           0           0         616         268    locomotion.o           build/default/production/locomotion.o
          494           0          28         522         20a    irq_handlers.o         build/default/production/irq_handlers.o
-         476           0           0         476         1dc    cciKxNCD.o             C:\Users\Jami\AppData\Local\Temp\cciKxNCD.o
+         476           0           0         476         1dc    ccAfNhKh.o             C:\Users\Jami\AppData\Local\Temp\ccAfNhKh.o
          128           0           0         128          80    data_init              data_init
           72           4          28         104          68    crtbegin.o             c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crtbegin.o
           94           0           0          94          5e    __libc_start_main.o    libc-musl.a
@@ -174,7 +174,7 @@ LOAD build/default/production/usart.o
 LOAD build/default/production/locomotion.o
 LOAD build/default/production/wireless.o
                 0x0000000000000001                __MPLAB_BUILD = 0x1
-LOAD C:\Users\Jami\AppData\Local\Temp\cciKxNCD.o
+LOAD C:\Users\Jami\AppData\Local\Temp\ccAfNhKh.o
 START GROUP
 LOAD c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a
 LOAD c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a
@@ -224,7 +224,7 @@ LOAD c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/th
                 0x0000000000000000                _sfixed = .
  *(.vectors .vectors.* .vectors_default .vectors_default.*)
  .vectors.default
-                0x0000000000000000      0x15c C:\Users\Jami\AppData\Local\Temp\cciKxNCD.o
+                0x0000000000000000      0x15c C:\Users\Jami\AppData\Local\Temp\ccAfNhKh.o
                 0x0000000000000000                exception_table
  *(.isr_vector)
  *(.reset*)
@@ -325,7 +325,7 @@ LOAD stack
  .ARM.attributes
                 0x0000000000000142       0x32 build/default/production/wireless.o
  .ARM.attributes
-                0x0000000000000174       0x30 C:\Users\Jami\AppData\Local\Temp\cciKxNCD.o
+                0x0000000000000174       0x30 C:\Users\Jami\AppData\Local\Temp\ccAfNhKh.o
  .ARM.attributes
                 0x00000000000001a4       0x30 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
  .ARM.attributes
@@ -356,7 +356,7 @@ LOAD stack
  .comment       0x000000000000002b       0x2c build/default/production/usart.o
  .comment       0x000000000000002b       0x2c build/default/production/locomotion.o
  .comment       0x000000000000002b       0x2c build/default/production/wireless.o
- .comment       0x000000000000002b       0x2c C:\Users\Jami\AppData\Local\Temp\cciKxNCD.o
+ .comment       0x000000000000002b       0x2c C:\Users\Jami\AppData\Local\Temp\ccAfNhKh.o
  .comment       0x000000000000002b       0x2c c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
  .comment       0x000000000000002b       0x2c c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
  .comment       0x000000000000002b       0x2c c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memset.o)
@@ -569,7 +569,7 @@ LOAD stack
  .bss           0x0000000000000000        0x0 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
 
 .bss%z8         0x0000000000000000        0x0
- .bss           0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\cciKxNCD.o
+ .bss           0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccAfNhKh.o
 
 .bss%z9         0x0000000000000000        0x0
  .bss           0x0000000000000000        0x0 build/default/production/wireless.o
@@ -621,7 +621,7 @@ LOAD stack
  .data          0x0000000000000000        0x0 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
 
 .data%z23       0x0000000000000000        0x0
- .data          0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\cciKxNCD.o
+ .data          0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccAfNhKh.o
 
 .data%z24       0x0000000000000000        0x0
  .data          0x0000000000000000        0x0 build/default/production/wireless.o
@@ -705,7 +705,7 @@ LOAD stack
 .text.Reset_Handler%17
                 0x00000000000025ec       0x7e
  .text.Reset_Handler
-                0x00000000000025ec       0x7e C:\Users\Jami\AppData\Local\Temp\cciKxNCD.o
+                0x00000000000025ec       0x7e C:\Users\Jami\AppData\Local\Temp\ccAfNhKh.o
                 0x00000000000025ec                Reset_Handler
 
 .text.__libc_start_init%18
@@ -761,7 +761,7 @@ LOAD stack
 .text.Dummy_Handler%27
                 0x000000000000256a        0x2
  .text.Dummy_Handler
-                0x000000000000256a        0x2 C:\Users\Jami\AppData\Local\Temp\cciKxNCD.o
+                0x000000000000256a        0x2 C:\Users\Jami\AppData\Local\Temp\ccAfNhKh.o
                 0x000000000000256a                SVCall_Handler
                 0x000000000000256a                SERCOM0_2_Handler
                 0x000000000000256a                EVSYS_0_Handler
@@ -876,7 +876,7 @@ LOAD stack
  .text          0x0000000000000000        0x0 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
 
 .text%z42       0x0000000000000000        0x0
- .text          0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\cciKxNCD.o
+ .text          0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccAfNhKh.o
 
 .text%z43       0x0000000000000000        0x0
  .text          0x0000000000000000        0x0 build/default/production/wireless.o
