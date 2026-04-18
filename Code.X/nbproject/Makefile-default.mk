@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c irq_handlers.c platform.c usart.c locomotion.c wireless.c check_sensors.c wall_following.c line_following.c
+SOURCEFILES_QUOTED_IF_SPACED=main.c irq_handlers.c platform.c usart.c locomotion.c check_sensors.c line_following.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/irq_handlers.o ${OBJECTDIR}/platform.o ${OBJECTDIR}/usart.o ${OBJECTDIR}/locomotion.o ${OBJECTDIR}/wireless.o ${OBJECTDIR}/check_sensors.o ${OBJECTDIR}/wall_following.o ${OBJECTDIR}/line_following.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/irq_handlers.o.d ${OBJECTDIR}/platform.o.d ${OBJECTDIR}/usart.o.d ${OBJECTDIR}/locomotion.o.d ${OBJECTDIR}/wireless.o.d ${OBJECTDIR}/check_sensors.o.d ${OBJECTDIR}/wall_following.o.d ${OBJECTDIR}/line_following.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/irq_handlers.o ${OBJECTDIR}/platform.o ${OBJECTDIR}/usart.o ${OBJECTDIR}/locomotion.o ${OBJECTDIR}/check_sensors.o ${OBJECTDIR}/line_following.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/irq_handlers.o.d ${OBJECTDIR}/platform.o.d ${OBJECTDIR}/usart.o.d ${OBJECTDIR}/locomotion.o.d ${OBJECTDIR}/check_sensors.o.d ${OBJECTDIR}/line_following.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/irq_handlers.o ${OBJECTDIR}/platform.o ${OBJECTDIR}/usart.o ${OBJECTDIR}/locomotion.o ${OBJECTDIR}/wireless.o ${OBJECTDIR}/check_sensors.o ${OBJECTDIR}/wall_following.o ${OBJECTDIR}/line_following.o
+OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/irq_handlers.o ${OBJECTDIR}/platform.o ${OBJECTDIR}/usart.o ${OBJECTDIR}/locomotion.o ${OBJECTDIR}/check_sensors.o ${OBJECTDIR}/line_following.o
 
 # Source Files
-SOURCEFILES=main.c irq_handlers.c platform.c usart.c locomotion.c wireless.c check_sensors.c wall_following.c line_following.c
+SOURCEFILES=main.c irq_handlers.c platform.c usart.c locomotion.c check_sensors.c line_following.c
 
 
 
@@ -131,23 +131,11 @@ ${OBJECTDIR}/locomotion.o: locomotion.c  .generated_files/flags/default/e0e43858
 	@${RM} ${OBJECTDIR}/locomotion.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/locomotion.o.d" -o ${OBJECTDIR}/locomotion.o locomotion.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/wireless.o: wireless.c  .generated_files/flags/default/f16ad3d068b5d940f58c75f8311fe03d8d8af958 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/wireless.o.d 
-	@${RM} ${OBJECTDIR}/wireless.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/wireless.o.d" -o ${OBJECTDIR}/wireless.o wireless.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
-	
 ${OBJECTDIR}/check_sensors.o: check_sensors.c  .generated_files/flags/default/2771455d0496879aa270ffb6ac420d7c542ae45c .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/check_sensors.o.d 
 	@${RM} ${OBJECTDIR}/check_sensors.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/check_sensors.o.d" -o ${OBJECTDIR}/check_sensors.o check_sensors.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
-	
-${OBJECTDIR}/wall_following.o: wall_following.c  .generated_files/flags/default/4b5fba842fab37bc1729cba0510d94cab2c2f645 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/wall_following.o.d 
-	@${RM} ${OBJECTDIR}/wall_following.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/wall_following.o.d" -o ${OBJECTDIR}/wall_following.o wall_following.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
 ${OBJECTDIR}/line_following.o: line_following.c  .generated_files/flags/default/7ed6a6297656a1e597589f7d4ea6fc142017ac05 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
@@ -186,23 +174,11 @@ ${OBJECTDIR}/locomotion.o: locomotion.c  .generated_files/flags/default/c1c0c2ba
 	@${RM} ${OBJECTDIR}/locomotion.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/locomotion.o.d" -o ${OBJECTDIR}/locomotion.o locomotion.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/wireless.o: wireless.c  .generated_files/flags/default/ecf016ea0fede22cda6952c32c1b94b391c3f7b9 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/wireless.o.d 
-	@${RM} ${OBJECTDIR}/wireless.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/wireless.o.d" -o ${OBJECTDIR}/wireless.o wireless.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
-	
 ${OBJECTDIR}/check_sensors.o: check_sensors.c  .generated_files/flags/default/12841202b745e7ca79842886d52f5ba8680f47fa .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/check_sensors.o.d 
 	@${RM} ${OBJECTDIR}/check_sensors.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/check_sensors.o.d" -o ${OBJECTDIR}/check_sensors.o check_sensors.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
-	
-${OBJECTDIR}/wall_following.o: wall_following.c  .generated_files/flags/default/b19487fb545318785b7132abe15e984e58725e4d .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/wall_following.o.d 
-	@${RM} ${OBJECTDIR}/wall_following.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/wall_following.o.d" -o ${OBJECTDIR}/wall_following.o wall_following.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
 ${OBJECTDIR}/line_following.o: line_following.c  .generated_files/flags/default/e7b876c81faa0b35ce4a51125fd6ddcbefb23397 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 

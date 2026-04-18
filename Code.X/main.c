@@ -371,9 +371,6 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 }
 
 
-// Functions for speed 
-
-
 
 
 int main(void) {

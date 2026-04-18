@@ -19,10 +19,16 @@
 #define MAX_SPEED 100
 #define MIN_SPEED 30
 
+#define MAX_PWM 255
+#define MIN_EFFECTIVE_SPEED 30
+
+static int a_speed = 0;
+static int b_speed = 0;
+
 // not verified
-#define KP 22
-#define KI 3
-#define KD 12
+#define KP 15   //22  adjust if want faster response
+#define KI 1    // 3  
+#define KD 8   //12   adjust to steady the robot
 
 #define INTEGRAL_LIMIT 80
 #define SEARCH_TIME 120
@@ -39,7 +45,7 @@ void line_following_algorithm(bool left, bool center, bool right)
 {
     int error = 0;
 
-    // Intersection (1 1 1) 
+    // Intersection (1 1 1) ALL BLACK DETECTED
     // this is when BLACK is 1 1 1 and White is 0 0 0
     if(left && center && right)
     {
@@ -60,7 +66,27 @@ void line_following_algorithm(bool left, bool center, bool right)
         }
     }
     
-    // Line Lost
+    // Special Case (1 0 1) TWO PATHS OF BLACK LINES
+    if(left && !center && right){
+        
+        integral = 0;
+        
+        // Choose left or right based on previous error
+        if(last_error <= 0){ 
+            turn_left();
+            set_a_speed(TURN_SPEED);
+            set_b_speed(BASE_SPEED);
+            last_error = -2;
+        } else { 
+            turn_right();
+            set_a_speed(BASE_SPEED);
+            set_b_speed(TURN_SPEED);
+            last_error = 2;
+        }
+        return;
+    }
+
+    // Line Lost (0 0 0) ALL WHITE DETECTED
     if(!left && !center && !right)
     {
         integral = 0;
@@ -102,13 +128,13 @@ void line_following_algorithm(bool left, bool center, bool right)
 
     if(integral > INTEGRAL_LIMIT) integral = INTEGRAL_LIMIT;
     if(integral < -INTEGRAL_LIMIT) integral = -INTEGRAL_LIMIT;
-
-    if(error == 0)
+    
+    if(abs(error) <= 1)
         integral = 0;
 
     int derivative = error - last_error;
 
-    int correction = KP*error + KI*integral + KD*derivative;
+    int correction = (KP*error + KI*integral + KD*derivative)/10;
 
     int speed_a = BASE_SPEED - correction;
     int speed_b = BASE_SPEED + correction;
@@ -128,44 +154,50 @@ void line_following_algorithm(bool left, bool center, bool right)
 }
 
 
+    int set_a_speed(int speed) {
+        if(speed < 0) speed = 0;
+        if(speed > 100) speed = 100;
+
+        if(speed > 0 && speed < MIN_EFFECTIVE_SPEED)
+            speed = MIN_EFFECTIVE_SPEED;
+
+        a_speed = speed;
+        return (speed * MAX_PWM) / 100;
+    }
+
+    int set_b_speed(int speed) {
+        if(speed < 0) speed = 0;
+        if(speed > 100) speed = 100;
+
+        if(speed > 0 && speed < MIN_EFFECTIVE_SPEED)
+            speed = MIN_EFFECTIVE_SPEED;
+
+        b_speed = speed;
+        return (speed * MAX_PWM) / 100;
+    }
+
+
 // TO DO/REMINDERS
 
-// WALA PA YUNG VOID SET_A_SPEED(INT SPEED) sa locomotion.c or main.c
-
 // SENSOR OUTPUT:
-//       NO DETECTION/BLACK IS HIGH (1)
+//       BLACK IS HIGH (1)
 //       DETECTION/ WHITE IS LOW (0)
 
 // in the sensor test,
 //    WHITE is LOW (0)
 //    BLACK is HIGH (1)
 //    NOTHING or FAR is HIGH (1)
+    
 
+// TEST
+// Motor Test: DONE
+// Sensor Test: Working
+// Line Following Algo Test using USART: IN PROGRESS
+// Test Algo with Motor: NOT YET
 
-
-
-
-
-
-// OLD VERSION 
-//    // Special Case (1 0 1)
-//    if(left && !center && right){
-//        
-//        integral = 0;
-//        
-//        // Choose left or right based on previous error
-//        if(last_error <= 0){ 
-//            turn_left();
-//            set_a_speed(TURN_SPEED);
-//            set_b_speed(BASE_SPEED);
-//            last_error = -2;
-//        } else { 
-//            turn_right();
-//            set_a_speed(BASE_SPEED);
-//            set_b_speed(TURN_SPEED);
-//            last_error = 2;
-//        }
-//        return;
-//    }
-
+// Line Following Algo Test using USART
+//      - must print the sensor's output 
+//            L C R
+//            1 0 0
+//      - must print yung decision if go forward, turn left, turn right
 

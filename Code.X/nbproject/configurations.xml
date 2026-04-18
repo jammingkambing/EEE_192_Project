@@ -253,6 +253,10 @@
       <nEdbgTool>
         <property key="debugoptions.useswbreakpoints" value="true"/>
       </nEdbgTool>
+      <item path="wall_following.c" ex="true" overriding="false">
+      </item>
+      <item path="wireless.c" ex="true" overriding="false">
+      </item>
     </conf>
   </confs>
 </configurationDescriptor>
