@@ -109,7 +109,7 @@ typedef struct prog_state_type
 	
 	// Receiver stuff
 	struct platform_usart_recv_data_type rx_info;
-	char rx_buf[16];
+	char rx_buf[20];
 } prog_state_t;
 
 prog_state_t ps;

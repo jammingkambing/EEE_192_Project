@@ -149,10 +149,9 @@ void platform_usart_cdc_init(void)
 	 *       as they will only clear when the buffer is empty and filled,
 	 *       respectively.
 	 */
-	SERCOM_CDC_REGS->SERCOM_CTRLA |= 0x01100000;
-	SERCOM_CDC_REGS->SERCOM_CTRLB  = 0x00000040;
+	SERCOM_CDC_REGS->SERCOM_CTRLA |= 0x00100000;
+	SERCOM_CDC_REGS->SERCOM_CTRLB  = 0x00000000;
 	SERCOM_CDC_REGS->SERCOM_CTRLC  = 0x08000000;
-
 	/*
 	 * In asynchronous USART mode (USART_EXT or USART_INT, CMODE=0), the baud rate
 	 * for the bitstream is determined according to the following formula:
@@ -178,7 +177,7 @@ void platform_usart_cdc_init(void)
 	 * the closest one should be selected to minimize the resulting bit-
 	 * error rate.
 	 */
-	SERCOM_CDC_REGS->SERCOM_BAUD = 50437;	// 38400 baud
+	SERCOM_CDC_REGS->SERCOM_BAUD = 50437;	// 57600 baud
 
 	/*
 	 * Third-to-the-last setup:
