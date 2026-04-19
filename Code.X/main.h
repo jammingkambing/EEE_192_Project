@@ -122,7 +122,7 @@ extern "C" {
     extern bool us_right(void);
     extern bool ir_left(void);
     extern bool ir_center(void);
-    extern bool ir_center(void);
+    extern bool ir_right(void);
 	
 	/**
 	 * Get available platform-event flags
