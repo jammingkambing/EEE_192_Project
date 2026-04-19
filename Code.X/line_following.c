@@ -192,12 +192,6 @@ void line_following_algorithm(bool left, bool center, bool right)
 // TEST
 // Motor Test: DONE
 // Sensor Test: Working
-// Line Following Algo Test using USART: IN PROGRESS
 // Test Algo with Motor: NOT YET
 
-// Line Following Algo Test using USART
-//      - must print the sensor's output 
-//            L C R
-//            1 0 0
-//      - must print yung decision if go forward, turn left, turn right
 
