@@ -113,6 +113,8 @@ extern "C" {
     extern void go_forward(void);
     extern void go_backward(void);
     extern void stop(void);
+
+	extern void delay_ms(int ms);
     
     /**
 	 * For sensor checking
@@ -123,6 +125,8 @@ extern "C" {
     extern bool ir_left(void);
     extern bool ir_center(void);
     extern bool ir_right(void);
+
+	extern void line_following_algorithm(bool left, bool center, bool right);
 	
 	/**
 	 * Get available platform-event flags

@@ -370,7 +370,13 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 	}
 }
 
-
+void delay_ms(int ms)
+{
+    for(int i = 0; i < ms; i++)
+    {
+        for(volatile int j = 0; j < 4000; j++);
+    }
+}
 
 
 int main(void) {
