@@ -1,13 +1,13 @@
 Archive member included to satisfy reference by file (symbol)
 
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
-                              C:\Users\Jami\AppData\Local\Temp\ccmKBnR3.o (__pic32c_data_initialization)
+                              C:\Users\Jami\AppData\Local\Temp\ccidscRK.o (__pic32c_data_initialization)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
                               build/default/production/main.o (memcmp)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memset.o)
                               build/default/production/usart.o (memset)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-musl.a(__libc_start_main.o)
-                              C:\Users\Jami\AppData\Local\Temp\ccmKBnR3.o (__libc_init_array)
+                              C:\Users\Jami\AppData\Local\Temp\ccidscRK.o (__libc_init_array)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-musl.a(libc.o)
                               c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-musl.a(__libc_start_main.o) (__progname_full)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-musl.a(__environ.o)
@@ -53,18 +53,18 @@ section                    address  length [bytes]      (dec)  Description
 RAM Data-Memory Usage
 section                    address  length [bytes]      (dec)  Description
 -------                 ----------  -------------------------  -----------
-.bss                    0x20000000           0xec         236  Uninitialized data 
-.bss                    0x200000ec           0xa8         168  Uninitialized data 
-.bss                    0x20000194           0x50          80  Uninitialized data 
-.bss                    0x200001e4           0x1c          28  Uninitialized data 
-.bss                    0x20000200           0x1c          28  Uninitialized data 
+.bss                    0x20000000           0xe8         232  Uninitialized data 
+.bss                    0x200000e8           0xa8         168  Uninitialized data 
+.bss                    0x20000190           0x50          80  Uninitialized data 
+.bss                    0x200001e0           0x1c          28  Uninitialized data 
+.bss                    0x200001fc           0x1c          28  Uninitialized data 
+.bss                    0x20000218            0x4           4  Uninitialized data 
 .bss                    0x2000021c            0x4           4  Uninitialized data 
-.bss                    0x20000220            0x4           4  Uninitialized data 
-.data                   0x20000224            0x4           4  Initialized data 
-.eh_frame               0x20000228            0x4           4   
-         Total RAM used  :       0x22c         556  1.7% of 0x8000
+.data                   0x20000220            0x4           4  Initialized data 
+.eh_frame               0x20000224            0x4           4   
+         Total RAM used  :       0x228         552  1.7% of 0x8000
         --------------------------------------------------------------------------
-            Total Data Memory used  :       0x22c         556  1.7% of 0x8000
+            Total Data Memory used  :       0x228         552  1.7% of 0x8000
         --------------------------------------------------------------------------
 
 
@@ -72,7 +72,7 @@ Dynamic Data-Memory Reservation
 section                    address  length [bytes]      (dec)  Description
 -------                 ----------  -------------------------  -----------
 heap                    0x20000230           0x10          16  Reserved for heap 
-stack                   0x20000258         0x7d98       32152  Reserved for stack 
+stack                   0x20000258         0x7da0       32160  Reserved for stack 
 
         --------------------------------------------------------------------------
 
@@ -80,12 +80,12 @@ Microchip PIC32 Memory-Usage Report By Module
 
         text        data         bss         dec         hex    basename                   filename
 --------------------------------------------------------------------------------
-        3232           0         236        3468         d8c    main.o                 build/default/production/main.o
+        3232           0         232        3464         d88    main.o                 build/default/production/main.o
         2868           0           0        2868         b34    platform.o             build/default/production/platform.o
         2120           0         168        2288         8f0    usart.o                build/default/production/usart.o
          616           0           0         616         268    locomotion.o           build/default/production/locomotion.o
          494           0          28         522         20a    irq_handlers.o         build/default/production/irq_handlers.o
-         476           0           0         476         1dc    ccmKBnR3.o             C:\Users\Jami\AppData\Local\Temp\ccmKBnR3.o
+         476           0           0         476         1dc    ccidscRK.o             C:\Users\Jami\AppData\Local\Temp\ccidscRK.o
          128           0           0         128          80    data_init              data_init
           72           4          28         104          68    crtbegin.o             c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crtbegin.o
           94           0           0          94          5e    __libc_start_main.o    libc-musl.a
@@ -100,7 +100,7 @@ Microchip PIC32 Memory-Usage Report By Module
            0           4           0           4           4    crtend.o               c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crtend.o
            0           0           4           4           4    __environ.o            libc-musl.a
 --------------------------------------------------------------------------------
-       10298           8         548       10854        2a66    dist/default/production/Code.X.production.elf
+       10298           8         544       10850        2a62    dist/default/production/Code.X.production.elf
 
 
 Discarded input sections
@@ -174,7 +174,7 @@ LOAD build/default/production/usart.o
 LOAD build/default/production/locomotion.o
 LOAD build/default/production/wireless.o
                 0x0000000000000001                __MPLAB_BUILD = 0x1
-LOAD C:\Users\Jami\AppData\Local\Temp\ccmKBnR3.o
+LOAD C:\Users\Jami\AppData\Local\Temp\ccidscRK.o
 START GROUP
 LOAD c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a
 LOAD c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a
@@ -224,7 +224,7 @@ LOAD c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/th
                 0x0000000000000000                _sfixed = .
  *(.vectors .vectors.* .vectors_default .vectors_default.*)
  .vectors.default
-                0x0000000000000000      0x15c C:\Users\Jami\AppData\Local\Temp\ccmKBnR3.o
+                0x0000000000000000      0x15c C:\Users\Jami\AppData\Local\Temp\ccidscRK.o
                 0x0000000000000000                exception_table
  *(.isr_vector)
  *(.reset*)
@@ -325,7 +325,7 @@ LOAD stack
  .ARM.attributes
                 0x0000000000000142       0x32 build/default/production/wireless.o
  .ARM.attributes
-                0x0000000000000174       0x30 C:\Users\Jami\AppData\Local\Temp\ccmKBnR3.o
+                0x0000000000000174       0x30 C:\Users\Jami\AppData\Local\Temp\ccidscRK.o
  .ARM.attributes
                 0x00000000000001a4       0x30 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
  .ARM.attributes
@@ -356,7 +356,7 @@ LOAD stack
  .comment       0x000000000000002b       0x2c build/default/production/usart.o
  .comment       0x000000000000002b       0x2c build/default/production/locomotion.o
  .comment       0x000000000000002b       0x2c build/default/production/wireless.o
- .comment       0x000000000000002b       0x2c C:\Users\Jami\AppData\Local\Temp\ccmKBnR3.o
+ .comment       0x000000000000002b       0x2c C:\Users\Jami\AppData\Local\Temp\ccidscRK.o
  .comment       0x000000000000002b       0x2c c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
  .comment       0x000000000000002b       0x2c c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
  .comment       0x000000000000002b       0x2c c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memset.o)
@@ -506,8 +506,8 @@ LOAD stack
 .stack          0x0000000020000258      0x100
  .stack         0x0000000020000258      0x100 stack
 
-.bss%1          0x0000000020000000       0xec
- .bss           0x0000000020000000       0xec build/default/production/main.o
+.bss%1          0x0000000020000000       0xe8
+ .bss           0x0000000020000000       0xe8 build/default/production/main.o
                 0x0000000020000000                idx_message
                 0x0000000020000004                step_per
                 0x0000000020000008                speed
@@ -515,37 +515,37 @@ LOAD stack
                 0x0000000020000010                setting_ptr
                 0x000000002000001c                ps
 
-.bss%2          0x00000000200000ec       0xa8
- .bss           0x00000000200000ec       0xa8 build/default/production/usart.o
+.bss%2          0x00000000200000e8       0xa8
+ .bss           0x00000000200000e8       0xa8 build/default/production/usart.o
 
-.bss%3          0x0000000020000194       0x50
- .bss           0x0000000020000194       0x50 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-musl.a(libc.o)
-                0x0000000020000194                __progname_full
-                0x0000000020000194                program_invocation_name
-                0x0000000020000198                program_invocation_short_name
-                0x0000000020000198                __progname
-                0x000000002000019c                __sysinfo
-                0x00000000200001a0                __hwcap
-                0x00000000200001a4                __libc
+.bss%3          0x0000000020000190       0x50
+ .bss           0x0000000020000190       0x50 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-musl.a(libc.o)
+                0x0000000020000190                __progname_full
+                0x0000000020000190                program_invocation_name
+                0x0000000020000194                program_invocation_short_name
+                0x0000000020000194                __progname
+                0x0000000020000198                __sysinfo
+                0x000000002000019c                __hwcap
+                0x00000000200001a0                __libc
 
-.bss%4          0x00000000200001e4       0x1c
- .bss           0x00000000200001e4       0x1c c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crtbegin.o
+.bss%4          0x00000000200001e0       0x1c
+ .bss           0x00000000200001e0       0x1c c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crtbegin.o
 
-.bss%5          0x0000000020000200       0x1c
- .bss           0x0000000020000200       0x1c build/default/production/irq_handlers.o
-                0x0000000020000200                line_left
-                0x0000000020000204                line_center
-                0x0000000020000208                line_right
+.bss%5          0x00000000200001fc       0x1c
+ .bss           0x00000000200001fc       0x1c build/default/production/irq_handlers.o
+                0x00000000200001fc                line_left
+                0x0000000020000200                line_center
+                0x0000000020000204                line_right
 
-.bss%6          0x000000002000021c        0x4
- .bss           0x000000002000021c        0x4 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
+.bss%6          0x0000000020000218        0x4
+ .bss           0x0000000020000218        0x4 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
 
-.bss%7          0x0000000020000220        0x4
- .bss           0x0000000020000220        0x4 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-musl.a(__environ.o)
-                0x0000000020000220                __environ
-                0x0000000020000220                environ
-                0x0000000020000220                ___environ
-                0x0000000020000220                _environ
+.bss%7          0x000000002000021c        0x4
+ .bss           0x000000002000021c        0x4 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-musl.a(__environ.o)
+                0x000000002000021c                __environ
+                0x000000002000021c                environ
+                0x000000002000021c                ___environ
+                0x000000002000021c                _environ
 
 .bss%z1         0x0000000000000000        0x0
  .bss           0x0000000000000000        0x0 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(pic32_data_init_copy.o)
@@ -569,7 +569,7 @@ LOAD stack
  .bss           0x0000000000000000        0x0 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
 
 .bss%z8         0x0000000000000000        0x0
- .bss           0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccmKBnR3.o
+ .bss           0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccidscRK.o
 
 .bss%z9         0x0000000000000000        0x0
  .bss           0x0000000000000000        0x0 build/default/production/wireless.o
@@ -583,12 +583,12 @@ LOAD stack
 .bss%z12        0x0000000000000000        0x0
  .bss           0x0000000000000000        0x0 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crti.o
 
-.data%8         0x0000000020000224        0x4
- .data          0x0000000020000224        0x4 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crtbegin.o
-                0x0000000020000224                __dso_handle
+.data%8         0x0000000020000220        0x4
+ .data          0x0000000020000220        0x4 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crtbegin.o
+                0x0000000020000220                __dso_handle
 
-.eh_frame%9     0x0000000020000228        0x4
- .eh_frame      0x0000000020000228        0x4 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crtend.o
+.eh_frame%9     0x0000000020000224        0x4
+ .eh_frame      0x0000000020000224        0x4 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crtend.o
 
 .data%z13       0x0000000000000000        0x0
  .data          0x0000000000000000        0x0 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(pic32_data_init_copy.o)
@@ -621,7 +621,7 @@ LOAD stack
  .data          0x0000000000000000        0x0 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
 
 .data%z23       0x0000000000000000        0x0
- .data          0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccmKBnR3.o
+ .data          0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccidscRK.o
 
 .data%z24       0x0000000000000000        0x0
  .data          0x0000000000000000        0x0 build/default/production/wireless.o
@@ -705,7 +705,7 @@ LOAD stack
 .text.Reset_Handler%17
                 0x0000000000002670       0x7e
  .text.Reset_Handler
-                0x0000000000002670       0x7e C:\Users\Jami\AppData\Local\Temp\ccmKBnR3.o
+                0x0000000000002670       0x7e C:\Users\Jami\AppData\Local\Temp\ccidscRK.o
                 0x0000000000002670                Reset_Handler
 
 .text.__libc_start_init%18
@@ -761,7 +761,7 @@ LOAD stack
 .text.Dummy_Handler%27
                 0x00000000000025ee        0x2
  .text.Dummy_Handler
-                0x00000000000025ee        0x2 C:\Users\Jami\AppData\Local\Temp\ccmKBnR3.o
+                0x00000000000025ee        0x2 C:\Users\Jami\AppData\Local\Temp\ccidscRK.o
                 0x00000000000025ee                SVCall_Handler
                 0x00000000000025ee                SERCOM0_2_Handler
                 0x00000000000025ee                EVSYS_0_Handler
@@ -876,7 +876,7 @@ LOAD stack
  .text          0x0000000000000000        0x0 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
 
 .text%z42       0x0000000000000000        0x0
- .text          0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccmKBnR3.o
+ .text          0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccidscRK.o
 
 .text%z43       0x0000000000000000        0x0
  .text          0x0000000000000000        0x0 build/default/production/wireless.o

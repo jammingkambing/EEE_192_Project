@@ -134,8 +134,8 @@ void platform_usart_cdc_init(void)
 	 * Select further settings compatible with the 16550 UART:
 	 *
 	 * - LSB first
-	 * - Even parity
-	 * - Two stop bits
+	 * - No parity
+	 * - One stop bit
 	 * - 8-bit character size
 	 * - No break detection
 	 * - With FIFO, 32-bit extensions disabled
