@@ -8,6 +8,7 @@
       <itemPath>eee158_hplib.h</itemPath>
       <itemPath>usart.h</itemPath>
       <itemPath>init.h</itemPath>
+      <itemPath>locomotion.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
