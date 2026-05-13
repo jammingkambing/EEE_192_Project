@@ -64,13 +64,13 @@ void stop(void) {
     b_stop();
 }
 
-void turn_right(void) {
+void turn_left(void) {
     PORT_SEC_REGS->GROUP[1].PORT_OUT |= (1 << 3); //STANDBY = H
     a_cw();
     b_ccw();
 }
 
-void turn_left(void) {
+void turn_right(void) {
     PORT_SEC_REGS->GROUP[1].PORT_OUT |= (1 << 3); //STANDBY = H
     a_ccw();
     b_cw();
@@ -78,12 +78,15 @@ void turn_left(void) {
 
 void go_forward(void) {
     PORT_SEC_REGS->GROUP[1].PORT_OUT |= (1 << 3); //STANDBY = H
-    a_ccw();
-    b_ccw();
+    a_cw();
+    b_cw();
 }
 
 void go_backward(void) {
     PORT_SEC_REGS->GROUP[1].PORT_OUT |= (1 << 3); //STANDBY = H
-    a_cw();
-    b_cw();
+    a_ccw();
+    b_ccw();
 }
+
+
+

@@ -5,6 +5,7 @@
  * Created on December 15, 2025, 10:10 AM
  */
 
+#include "eee158_hplib.h"
 #include "main.h"
 #include "usart.h"
 #include "init.h"
@@ -13,11 +14,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern int trip;
-extern int stepper;
 volatile int idx_message;
 
-int step_per;
+bool us_left_status, us_center_status, us_right_status, ir_left_status, ir_center_status, ir_right_status;
 int speed;
 int setting = 0;
 char setting_ptr[9];
@@ -34,7 +33,7 @@ static const char banner_msg[] =
 "|                                                                |\r\n"
 "| Date:    2026                                                  |\r\n"
 "+----------------------------------------------------------------+\r\n"
-"| INSTRUCTIONS: Have fun!                                        |\r\n"
+"| INSTRUCTIONS: 1 - Remote, 2 - Wall, 3 - Line                   |\r\n"
 "+----------------------------------------------------------------+\r\n"
 "\r\n"
 "Direction: "	// Line 14
@@ -220,10 +219,12 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
             ps->tx_desc[ps->tx_nr_desc].len = 6;
             break;
             case 1:
-            ps->tx_desc[ps->tx_nr_desc].buf = "AUTONOMOUS";
-            ps->tx_desc[ps->tx_nr_desc].len = 9;
+            ps->tx_desc[ps->tx_nr_desc].buf = "WALL-FOLLOWING";
+            ps->tx_desc[ps->tx_nr_desc].len = 14;
             break;
-            
+            case 2: 
+            ps->tx_desc[ps->tx_nr_desc].buf = "LINE-FOLLOWING";
+            ps->tx_desc[ps->tx_nr_desc].len = 14;
         }
         ps->tx_nr_desc += 1;
 
@@ -290,6 +291,19 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
                 setting = 0;
             }
         }
+        /*
+		 * Mode reception
+		 */
+        else if (ps->rx_info.len == 1) {
+			if (ps->rx_info.buf[0] == '1') {
+                idx_message = 1;
+			} else if (ps->rx_info.buf[0] == '2') {
+				idx_message = 2;
+			} else if (ps->rx_info.buf[0] == '3') {
+				idx_message = 3;
+			}
+		}
+        
 		else if (ps->rx_info.len > 1 && ps->rx_info.buf[0] == '\033') {
 			/*
 			 * Escape sequence
@@ -330,11 +344,17 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 	}
 }
 
+void delay_ms(int ms)
+{
+    for(int i = 0; i < ms; i++)
+    {
+        for(volatile int j = 0; j < 4000; j++);
+    }
+}
 
 int main(void) {
     
     int a_speed, b_speed = 0;
-    int line_left, line_center, line_right = 0;
     
     struct {
 		unsigned int sweep;
@@ -351,70 +371,68 @@ int main(void) {
     idx_message = 0;
     
     for (;;) {
-        
-       if ((PORT_SEC_REGS->GROUP[0].PORT_IN & (1 << 9)) == 1) {
-           line_right = 1;
-       }
-       else {
-           line_right = 0;
-       }
-       
-       if ((PORT_SEC_REGS->GROUP[0].PORT_IN & (1 << 10)) == 1) {
-           line_center = 1;
-       }
-       else {
-           line_center = 0;
-       }
-       
-       if ((PORT_SEC_REGS->GROUP[0].PORT_IN & (1 << 11)) == 1) {
-           line_right = 1;
-       }
-       else {
-           line_right = 0;
-       }
       
+        
+       ir_left_status = ir_left();
+       ir_center_status = ir_center();
+       ir_right_status = ir_right();
+       
        ts_curr = platform_systick_count();
        ts_delta = platform_tick_delta(ts_curr, tick_ctrs.sweep);
        
        prog_loop_do_one_tx(&ps, idx_message);
        prog_loop_do_one_rx(&ps);
        
-        if (ts_delta >= (20/PLATFORM_TICK_MS)) {
-//          // At least 20 ms have elapsed
+        if (ts_delta >= (80/PLATFORM_TICK_MS)) {
+//          // At least 80 ms have elapsed
             tick_ctrs.sweep = ts_curr;
+            ir_left_status = ir_left();
+            ir_center_status = ir_center();
+            ir_right_status = ir_right();
         }
-        
-       switch (setting) {
-           case 0:
-               stop();
-               break;
-           case 1:
-               go_forward();
-               a_speed = 50;
-               b_speed = 35;
-               break;
-           case 2: 
-               go_backward();
-               a_speed = 50;
-               b_speed = 35;
-               break;
-           case 3: 
-               turn_right();
-               a_speed = 50;
-               b_speed = 50;
-               break;
-           case 4: 
-               turn_left();
-               a_speed = 50;
-               b_speed = 50;
-               break;
-       }
        
-       // I'm gonna have to figure out the logic for this... disgusting
-       if ((TCC3_REGS->TCC_SYNCBUSY & 0x00000080) == 0) {
-                TCC3_REGS->TCC_CCBUF[1] = a_speed;
-                TCC3_REGS->TCC_CCBUF[0] = b_speed;
-	}
-        
+       switch (idx_message) {
+           case 1:
+            switch (setting) {
+                case 0:
+                    stop();
+                    break;
+                case 1:
+                    go_forward();
+                    a_speed = 50;
+                    b_speed = 35;
+                    break;
+                case 2: 
+                    go_backward();
+                    a_speed = 50;
+                    b_speed = 35;
+                    break;
+                case 3: 
+                    turn_right();
+                    a_speed = 50;
+                    b_speed = 50;
+                    break;
+                case 4: 
+                    turn_left();
+                    a_speed = 50;
+                    b_speed = 50;
+                    break;
+            }
+
+            // I'm gonna have to figure out the logic for this... disgusting
+            if ((TCC3_REGS->TCC_SYNCBUSY & 0x00000080) == 0) {
+                     TCC3_REGS->TCC_CCBUF[1] = a_speed;
+                     TCC3_REGS->TCC_CCBUF[0] = b_speed;
+             }
+            break;
+           case 2:
+               line_following_algorithm(ir_left_status, ir_center_status, ir_right_status);
+               break;
+           case 3:
+               wall_following_algorithm();
+               break;
+           
+
+     }
     }
 }
