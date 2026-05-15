@@ -111,7 +111,7 @@ typedef struct prog_state_type
 	unsigned int state_id;
 	
 	// Transmit stuff
-	struct platform_ro_buf_desc tx_desc[25];
+	struct platform_ro_buf_desc tx_desc[30];
 	uint16_t tx_nr_desc;
 	char	tx_buf[60];
 	unsigned int tx_buf_len;
@@ -248,7 +248,7 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
         ps->tx_nr_desc += 1;
         
         ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_IR_CENTER;
-		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_MESSAGE)-1;
+		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_IR_CENTER)-1;
         ps->tx_nr_desc += 1;
         
         if (ir_center_status) {
@@ -262,7 +262,7 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
         ps->tx_nr_desc += 1;
         
         ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_IR_RIGHT;
-		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_MESSAGE)-1;
+		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_IR_RIGHT)-1;
         ps->tx_nr_desc += 1;
         
         if (ir_right_status) {
@@ -274,7 +274,30 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
             ps->tx_desc[ps->tx_nr_desc].len = 4;
         }
         ps->tx_nr_desc += 1;
+        
+        ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_US_LEFT;
+		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_US_LEFT)-1;
+        ps->tx_nr_desc += 1;
+        
+        ps->tx_desc[ps->tx_nr_desc].buf = "Wala?!";
+        ps->tx_desc[ps->tx_nr_desc].len = 6;
+        ps->tx_nr_desc += 1;
+        
+        ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_US_CENTER;
+		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_US_CENTER)-1;
+        ps->tx_nr_desc += 1;
+        
+        ps->tx_desc[ps->tx_nr_desc].buf = "Wala?!";
+        ps->tx_desc[ps->tx_nr_desc].len = 6;
+        ps->tx_nr_desc += 1;
 
+        ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_US_RIGHT;
+		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_US_RIGHT)-1;
+        ps->tx_nr_desc += 1;
+        
+        ps->tx_desc[ps->tx_nr_desc].buf = "Wala?!";
+        ps->tx_desc[ps->tx_nr_desc].len = 6;
+        ps->tx_nr_desc += 1;
 	}
 
 	// Enqueue them for transmission
