@@ -1,1 +1,0 @@
- $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common   -D=$(CND_CONF)  $(COMPARISON_BUILD)    C:\Users\Jami\Desktop\GitHub\EEE_192_Project\Code.X\main.c

@@ -28,12 +28,12 @@ CP=cp
 CND_CONF=default
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 IMAGE_TYPE=debug
-OUTPUT_SUFFIX=null
+OUTPUT_SUFFIX=elf
 DEBUGGABLE_SUFFIX=elf
 FINAL_IMAGE=${DISTDIR}/Code.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 else
 IMAGE_TYPE=production
-OUTPUT_SUFFIX=null
+OUTPUT_SUFFIX=hex
 DEBUGGABLE_SUFFIX=elf
 FINAL_IMAGE=${DISTDIR}/Code.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 endif
@@ -87,7 +87,7 @@ ifneq ($(INFORMATION_MESSAGE), )
 endif
 	${MAKE}  -f nbproject/Makefile-default.mk ${DISTDIR}/Code.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 
-MP_PROCESSOR_OPTION=
+MP_PROCESSOR_OPTION=32CM5164LS00048
 MP_LINKER_FILE_OPTION=
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: assemble
@@ -104,102 +104,102 @@ endif
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/231741b85bc248ced1a7260c8ebe93060085fbc2 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/f49a7519e1c96907ccc575f4f5174d7e90e559cb .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/main.o.d 
 	@${RM} ${OBJECTDIR}/main.o 
-	 $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/main.o.d" -o ${OBJECTDIR}/main.o main.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/main.o.d" -o ${OBJECTDIR}/main.o main.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/irq_handlers.o: irq_handlers.c  .generated_files/flags/default/b227642ab84944d950855ea6b9d9afb7fd85a8d0 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/irq_handlers.o: irq_handlers.c  .generated_files/flags/default/77f9b0d596e1a50d5b9a50cdcb4206e03e8ac937 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/irq_handlers.o.d 
 	@${RM} ${OBJECTDIR}/irq_handlers.o 
-	 $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/irq_handlers.o.d" -o ${OBJECTDIR}/irq_handlers.o irq_handlers.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/irq_handlers.o.d" -o ${OBJECTDIR}/irq_handlers.o irq_handlers.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/platform.o: platform.c  .generated_files/flags/default/4f6453290123f95b08bbb7ff1b9d7208aa8afa82 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/platform.o: platform.c  .generated_files/flags/default/8bd02025ea88c12f42e0b9593397c66a26f62666 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/platform.o.d 
 	@${RM} ${OBJECTDIR}/platform.o 
-	 $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/platform.o.d" -o ${OBJECTDIR}/platform.o platform.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/platform.o.d" -o ${OBJECTDIR}/platform.o platform.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/usart.o: usart.c  .generated_files/flags/default/f7324bcfb304330d0641bbd58e60a122a8e5fba .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/usart.o: usart.c  .generated_files/flags/default/cdee37603a95f6e6379c151e334d9c296a85cfaf .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/usart.o.d 
 	@${RM} ${OBJECTDIR}/usart.o 
-	 $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/usart.o.d" -o ${OBJECTDIR}/usart.o usart.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/usart.o.d" -o ${OBJECTDIR}/usart.o usart.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/locomotion.o: locomotion.c  .generated_files/flags/default/6ca0fb66d45a37cf46b3304ad1183a54e7e3e0df .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/locomotion.o: locomotion.c  .generated_files/flags/default/6ea27ec7259c6b854edf9cc90e650738639c907d .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/locomotion.o.d 
 	@${RM} ${OBJECTDIR}/locomotion.o 
-	 $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/locomotion.o.d" -o ${OBJECTDIR}/locomotion.o locomotion.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/locomotion.o.d" -o ${OBJECTDIR}/locomotion.o locomotion.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/wireless.o: wireless.c  .generated_files/flags/default/b9bf6523f483c876e97ff5417a1f1afaf7c14c3c .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/wireless.o: wireless.c  .generated_files/flags/default/7eb9a5d99bbb2591fb49efd02caacc687d420b67 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/wireless.o.d 
 	@${RM} ${OBJECTDIR}/wireless.o 
-	 $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/wireless.o.d" -o ${OBJECTDIR}/wireless.o wireless.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/wireless.o.d" -o ${OBJECTDIR}/wireless.o wireless.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/wall_following.o: wall_following.c  .generated_files/flags/default/5ab6fe9daecb5151b2069360fb851bcfda51e513 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/wall_following.o: wall_following.c  .generated_files/flags/default/3b678a9d20da93420949a3590d5753f3973962b5 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/wall_following.o.d 
 	@${RM} ${OBJECTDIR}/wall_following.o 
-	 $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/wall_following.o.d" -o ${OBJECTDIR}/wall_following.o wall_following.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/wall_following.o.d" -o ${OBJECTDIR}/wall_following.o wall_following.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/line_following.o: line_following.c  .generated_files/flags/default/5f40c6e0e5184223e8753a57c03c5ccbf8b10dde .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/line_following.o: line_following.c  .generated_files/flags/default/84eea00c59d73b7921b9a3736322a384dc28eed9 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/line_following.o.d 
 	@${RM} ${OBJECTDIR}/line_following.o 
-	 $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/line_following.o.d" -o ${OBJECTDIR}/line_following.o line_following.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/line_following.o.d" -o ${OBJECTDIR}/line_following.o line_following.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
 else
-${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/8bf41620567d512a2db4da23a084dfb7618b27c .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/6bd6613bac46269efb4778e836c344d48ead15c7 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/main.o.d 
 	@${RM} ${OBJECTDIR}/main.o 
-	 $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/main.o.d" -o ${OBJECTDIR}/main.o main.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/main.o.d" -o ${OBJECTDIR}/main.o main.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/irq_handlers.o: irq_handlers.c  .generated_files/flags/default/34376b255bef881a190c1a67c2f1ac08bb6802a .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/irq_handlers.o: irq_handlers.c  .generated_files/flags/default/956f8a147eafafdf84735c0aef9fcf8d93f43663 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/irq_handlers.o.d 
 	@${RM} ${OBJECTDIR}/irq_handlers.o 
-	 $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/irq_handlers.o.d" -o ${OBJECTDIR}/irq_handlers.o irq_handlers.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/irq_handlers.o.d" -o ${OBJECTDIR}/irq_handlers.o irq_handlers.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/platform.o: platform.c  .generated_files/flags/default/2970c3e110c3e31018ff0437faab6458278601a8 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/platform.o: platform.c  .generated_files/flags/default/7c04f1e78770c1b3ffc1534d4b4cb55a2ccfb3cf .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/platform.o.d 
 	@${RM} ${OBJECTDIR}/platform.o 
-	 $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/platform.o.d" -o ${OBJECTDIR}/platform.o platform.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/platform.o.d" -o ${OBJECTDIR}/platform.o platform.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/usart.o: usart.c  .generated_files/flags/default/766bbb0b0de66573cd0a0d0098caaea63be134e1 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/usart.o: usart.c  .generated_files/flags/default/7a92a82eb8838c17ce34ead9e26eac5b450b400c .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/usart.o.d 
 	@${RM} ${OBJECTDIR}/usart.o 
-	 $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/usart.o.d" -o ${OBJECTDIR}/usart.o usart.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/usart.o.d" -o ${OBJECTDIR}/usart.o usart.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/locomotion.o: locomotion.c  .generated_files/flags/default/4581900fa544163443be4df33a75d4560d07b4f1 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/locomotion.o: locomotion.c  .generated_files/flags/default/836f91802664f0a499a774910fd7f1400ceb6325 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/locomotion.o.d 
 	@${RM} ${OBJECTDIR}/locomotion.o 
-	 $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/locomotion.o.d" -o ${OBJECTDIR}/locomotion.o locomotion.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/locomotion.o.d" -o ${OBJECTDIR}/locomotion.o locomotion.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/wireless.o: wireless.c  .generated_files/flags/default/3d4c7a482c40b9097f5f64dee2262dedfa2eb4d1 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/wireless.o: wireless.c  .generated_files/flags/default/c4863e3e902eabd9dd3248dbaa3480352b6a4fda .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/wireless.o.d 
 	@${RM} ${OBJECTDIR}/wireless.o 
-	 $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/wireless.o.d" -o ${OBJECTDIR}/wireless.o wireless.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/wireless.o.d" -o ${OBJECTDIR}/wireless.o wireless.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/wall_following.o: wall_following.c  .generated_files/flags/default/db9b3c0268da0ce2e7c7d8df763016900e433d38 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/wall_following.o: wall_following.c  .generated_files/flags/default/20f02d8bb633c03b9c9fcfaf197f9eed9d09b005 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/wall_following.o.d 
 	@${RM} ${OBJECTDIR}/wall_following.o 
-	 $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/wall_following.o.d" -o ${OBJECTDIR}/wall_following.o wall_following.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/wall_following.o.d" -o ${OBJECTDIR}/wall_following.o wall_following.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/line_following.o: line_following.c  .generated_files/flags/default/9f05eddfead8272608193f009d0c5eb47ec73156 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/line_following.o: line_following.c  .generated_files/flags/default/4222b151eae295a5bbc6cd3fb2015e4553b44bd .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/line_following.o.d 
 	@${RM} ${OBJECTDIR}/line_following.o 
-	 $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MMD -MF "${OBJECTDIR}/line_following.o.d" -o ${OBJECTDIR}/line_following.o line_following.c    -D=$(CND_CONF)  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O0 -fno-common -MP -MMD -MF "${OBJECTDIR}/line_following.o.d" -o ${OBJECTDIR}/line_following.o line_following.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
 endif
 
@@ -214,12 +214,12 @@ endif
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 ${DISTDIR}/Code.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk    
 	@${MKDIR} ${DISTDIR} 
-	$(MP_EXTRA_LD_PRE) -g   -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${DISTDIR}/Code.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -D=$(CND_CONF)  $(COMPARISON_BUILD)  -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--no-code-in-dinit,--no-dinit-in-serial-mem,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map" 
+	${MP_CC} $(MP_EXTRA_LD_PRE) -g   -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${DISTDIR}/Code.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,-D=__DEBUG_D,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--memorysummary,${DISTDIR}/memoryfile.xml -mdfp="${DFP_DIR}/PIC32CM-LS00"
 	
 else
 ${DISTDIR}/Code.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   
 	@${MKDIR} ${DISTDIR} 
-	$(MP_EXTRA_LD_PRE)  -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${DISTDIR}/Code.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -D=$(CND_CONF)  $(COMPARISON_BUILD)  -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--no-code-in-dinit,--no-dinit-in-serial-mem,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map" 
+	${MP_CC} $(MP_EXTRA_LD_PRE)  -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${DISTDIR}/Code.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--memorysummary,${DISTDIR}/memoryfile.xml -mdfp="${DFP_DIR}/PIC32CM-LS00"
 	${MP_CC_DIR}\\xc32-bin2hex ${DISTDIR}/Code.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} 
 endif
 

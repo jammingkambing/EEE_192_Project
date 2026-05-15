@@ -17,7 +17,7 @@
 volatile int idx_message;
 
 bool us_left_status, us_center_status, us_right_status, ir_left_status, ir_center_status, ir_right_status;
-int speed;
+int speed = 0;
 int setting = 0;
 char setting_ptr[9];
 
@@ -38,24 +38,36 @@ static const char banner_msg[] =
 "\r\n"
 "Direction: "	// Line 14
 "\r\n"
-"Speed: "
+"Speed: "       // 15
 "\r\n"
-"Mode: "
+"Mode: "        // 16
 "\r\n"
-"Ultrasonic sensor data:     LEFT:      CENTER:         RIGHT: "
+"US"            // 17
 "\r\n"
-"Infrared sensor data:       LEFT:      CENTER:         RIGHT: ";
+"LEFT: "        // 18
+"\r\n"
+"CENTER: "      //19
+"\r\n"
+"RIGHT: "       // 20
+"\r\n"
+"IR"            // 21
+"\r\n"
+"LEFT: "        // 22
+"\r\n"
+"CENTER: "      // 23
+"\r\n"
+"RIGHT: ";      // 24
 
 // Escape sequence prepended to the start of the sequence display
 #define ESC_SEQ_BLINKMODE "\033[14;20H\033[0K"
 #define ESC_SEQ_BRIGHTNESS "\033[15;20H\033[0K"
 #define ESC_SEQ_MESSAGE "\033[16;20H\033[0K"
-#define ESC_SEQ_US_LEFT "\033[17;34H\033[0K"
-#define ESC_SEQ_IR_LEFT "\033[18;34H\033[0K"
-#define ESC_SEQ_US_CENTER "\033[17;47H\033[0K"
-#define ESC_SEQ_IR_CENTER "\033[18;47H\033[0K"
-#define ESC_SEQ_US_CENTER "\033[17;47H\033[0K"
-#define ESC_SEQ_IR_CENTER "\033[18;47H\033[0K"
+#define ESC_SEQ_IR_LEFT "\033[18;20H\033[0K"
+#define ESC_SEQ_IR_CENTER "\033[19;20H\033[0K"
+#define ESC_SEQ_IR_RIGHT "\033[20;20H\033[0K"
+#define ESC_SEQ_US_LEFT "\033[22;20H\033[0K"
+#define ESC_SEQ_US_CENTER "\033[23;20H\033[0K"
+#define ESC_SEQ_US_RIGHT "\033[24;20H\033[0K"
 
 
 // List of color schemes...
@@ -192,20 +204,10 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
 
         switch (speed) {
             case 0:
-            ps->tx_desc[ps->tx_nr_desc].buf = "okay lang";
-            ps->tx_desc[ps->tx_nr_desc].len = 9;
+            ps->tx_desc[ps->tx_nr_desc].buf = "placeholder";
+            ps->tx_desc[ps->tx_nr_desc].len = 11;
             break;
-            case 1:
-            ps->tx_desc[ps->tx_nr_desc].buf = "medyo fast";
-            ps->tx_desc[ps->tx_nr_desc].len = 10;
-            break;
-            case 2:
-            ps->tx_desc[ps->tx_nr_desc].buf = "SKREEEE";
-            ps->tx_desc[ps->tx_nr_desc].len = 7;
-            break;
-            
         }
-        
         
         ps->tx_nr_desc += 1;
         
@@ -225,8 +227,16 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
             case 2: 
             ps->tx_desc[ps->tx_nr_desc].buf = "LINE-FOLLOWING";
             ps->tx_desc[ps->tx_nr_desc].len = 14;
+            case 3:
+            ps->tx_desc[ps->tx_nr_desc].buf = "SAFE";
+            ps->tx_desc[ps->tx_nr_desc].len = 4;
         }
         ps->tx_nr_desc += 1;
+        
+        ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_IR_LEFT;
+		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_IR_LEFT)-1;
+        
+     
 
 	}
 
@@ -383,14 +393,6 @@ int main(void) {
        prog_loop_do_one_tx(&ps, idx_message);
        prog_loop_do_one_rx(&ps);
        
-        if (ts_delta >= (80/PLATFORM_TICK_MS)) {
-//          // At least 80 ms have elapsed
-            tick_ctrs.sweep = ts_curr;
-            ir_left_status = ir_left();
-            ir_center_status = ir_center();
-            ir_right_status = ir_right();
-        }
-       
        switch (idx_message) {
            case 1:
             switch (setting) {
@@ -426,6 +428,13 @@ int main(void) {
              }
             break;
            case 2:
+               if (ts_delta >= (80/PLATFORM_TICK_MS)) {
+                    // At least 80 ms have elapsed
+                    tick_ctrs.sweep = ts_curr;
+                    ir_left_status = ir_left();
+                    ir_center_status = ir_center();
+                    ir_right_status = ir_right();
+                }
                line_following_algorithm(ir_left_status, ir_center_status, ir_right_status);
                break;
            case 3:
