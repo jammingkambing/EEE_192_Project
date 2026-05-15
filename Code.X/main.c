@@ -33,7 +33,7 @@ static const char banner_msg[] =
 "|                                                                |\r\n"
 "| Date:    2026                                                  |\r\n"
 "+----------------------------------------------------------------+\r\n"
-"| INSTRUCTIONS: 1 - Remote, 2 - Wall, 3 - Line                   |\r\n"
+"| INSTRUCTIONS: 1 - Remote, 2 - Line, 3 - Wall                   |\r\n"
 "+----------------------------------------------------------------+\r\n"
 "\r\n"
 "Direction: "	// Line 14
@@ -111,7 +111,7 @@ typedef struct prog_state_type
 	unsigned int state_id;
 	
 	// Transmit stuff
-	struct platform_ro_buf_desc tx_desc[30];
+	struct platform_ro_buf_desc tx_desc[35];
 	uint16_t tx_nr_desc;
 	char	tx_buf[60];
 	unsigned int tx_buf_len;
@@ -216,18 +216,18 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
         ps->tx_nr_desc += 1;
         
         switch (idx_message) {
-            case 0:
+            case 1:
             ps->tx_desc[ps->tx_nr_desc].buf = "REMOTE";
             ps->tx_desc[ps->tx_nr_desc].len = 6;
             break;
-            case 1:
-            ps->tx_desc[ps->tx_nr_desc].buf = "WALL-FOLLOWING";
-            ps->tx_desc[ps->tx_nr_desc].len = 14;
-            break;
-            case 2: 
+            case 2:
             ps->tx_desc[ps->tx_nr_desc].buf = "LINE-FOLLOWING";
             ps->tx_desc[ps->tx_nr_desc].len = 14;
-            case 3:
+            break;
+            case 3: 
+            ps->tx_desc[ps->tx_nr_desc].buf = "WALL-FOLLOWING";
+            ps->tx_desc[ps->tx_nr_desc].len = 14;
+            case 4:
             ps->tx_desc[ps->tx_nr_desc].buf = "SAFE";
             ps->tx_desc[ps->tx_nr_desc].len = 4;
         }
@@ -438,7 +438,7 @@ int main(void) {
     
     ps.tx_flags = 0x0001;
     
-    idx_message = 0;
+    idx_message = 1;
     
     for (;;) {
       

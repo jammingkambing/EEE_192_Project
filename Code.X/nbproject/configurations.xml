@@ -30,6 +30,7 @@
       <itemPath>wireless.c</itemPath>
       <itemPath>wall_following.c</itemPath>
       <itemPath>line_following.c</itemPath>
+      <itemPath>check_sensors.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
