@@ -1,7 +1,7 @@
 Archive member included to satisfy reference by file (symbol)
 
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
-                              C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o (__pic32c_data_initialization)
+                              C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o (__pic32c_data_initialization)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
                               build/default/debug/main.o (memcmp)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memset.o)
@@ -15,7 +15,7 @@ c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../.
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libm-fast-emfloat.a(__aeabi_i2f.o)
                               build/default/debug/wall_following.o (__aeabi_i2f)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libg-musl.a(__libc_start_main.o)
-                              C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o (__libc_init_array)
+                              C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o (__libc_init_array)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libg-musl.a(libc.o)
                               c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libg-musl.a(__libc_start_main.o) (__progname_full)
 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libg-musl.a(__sio_snprintf_cdnsu.o)
@@ -177,7 +177,7 @@ Microchip PIC32 Memory-Usage Report By Module
          802           0           0         802         322    _udivmoddi4.o          libgcc.a
          616           0           0         616         268    locomotion.o           build/default/debug/locomotion.o
          494           0          28         522         20a    irq_handlers.o         build/default/debug/irq_handlers.o
-         476           0           0         476         1dc    ccohv5sZ.o             C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+         476           0           0         476         1dc    ccX6mvHg.o             C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
          182           0           0         182          b6    __pop_int.o            libg-musl.a
          182           0           0         182          b6    __aeabi_fmul.o         libm-fast-emfloat.a
          174           0           0         174          ae    __fmt_d.o              libg-musl.a
@@ -384,7 +384,7 @@ LOAD build/default/debug/check_sensors.o
                 0x0000000000000001                __ICD2RAM = 0x1
                 0x0000000000000001                __MPLAB_DEBUG = 0x1
                 0x0000000000000001                __DEBUG = 0x1
-LOAD C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+LOAD C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
 START GROUP
 LOAD c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a
 LOAD c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a
@@ -435,7 +435,7 @@ LOAD c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/th
                 0x0000000000000000                _sfixed = .
  *(.vectors .vectors.* .vectors_default .vectors_default.*)
  .vectors.default
-                0x0000000000000000      0x15c C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+                0x0000000000000000      0x15c C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
                 0x0000000000000000                exception_table
  *(.isr_vector)
  *(.reset*)
@@ -544,7 +544,7 @@ LOAD stack
  .ARM.attributes
                 0x00000000000001d4       0x30 build/default/debug/check_sensors.o
  .ARM.attributes
-                0x0000000000000204       0x30 C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+                0x0000000000000204       0x30 C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
  .ARM.attributes
                 0x0000000000000234       0x30 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
  .ARM.attributes
@@ -624,7 +624,7 @@ LOAD stack
  .comment       0x000000000000002b       0x2c build/default/debug/wall_following.o
  .comment       0x000000000000002b       0x2c build/default/debug/line_following.o
  .comment       0x000000000000002b       0x2c build/default/debug/check_sensors.o
- .comment       0x000000000000002b       0x2c C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+ .comment       0x000000000000002b       0x2c C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
  .comment       0x000000000000002b       0x2c c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
  .comment       0x000000000000002b       0x2c c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
  .comment       0x000000000000002b       0x2c c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memset.o)
@@ -661,7 +661,7 @@ LOAD stack
  .debug_info    0x0000000000003836      0xb4f build/default/debug/wall_following.o
  .debug_info    0x0000000000004385      0x3f0 build/default/debug/line_following.o
  .debug_info    0x0000000000004775      0x32a build/default/debug/check_sensors.o
- .debug_info    0x0000000000004a9f      0x742 C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+ .debug_info    0x0000000000004a9f      0x742 C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
  .debug_info    0x00000000000051e1       0x68 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
  .debug_info    0x0000000000005249       0xda c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
  .debug_info    0x0000000000005323       0xbb c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memset.o)
@@ -700,7 +700,7 @@ LOAD stack
  .debug_abbrev  0x0000000000000998      0x25d build/default/debug/wall_following.o
  .debug_abbrev  0x0000000000000bf5       0xfa build/default/debug/line_following.o
  .debug_abbrev  0x0000000000000cef       0xb3 build/default/debug/check_sensors.o
- .debug_abbrev  0x0000000000000da2      0x129 C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+ .debug_abbrev  0x0000000000000da2      0x129 C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
  .debug_abbrev  0x0000000000000ecb       0x44 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
  .debug_abbrev  0x0000000000000f0f       0xa7 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
  .debug_abbrev  0x0000000000000fb6       0xa2 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memset.o)
@@ -779,7 +779,7 @@ LOAD stack
  .debug_aranges
                 0x00000000000000e0       0x20 build/default/debug/check_sensors.o
  .debug_aranges
-                0x0000000000000100       0x28 C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+                0x0000000000000100       0x28 C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
  .debug_aranges
                 0x0000000000000128       0x30 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
  .debug_aranges
@@ -847,7 +847,7 @@ LOAD stack
  .debug_line    0x0000000000001476      0x6f6 build/default/debug/wall_following.o
  .debug_line    0x0000000000001b6c      0x222 build/default/debug/line_following.o
  .debug_line    0x0000000000001d8e      0x16d build/default/debug/check_sensors.o
- .debug_line    0x0000000000001efb      0x220 C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+ .debug_line    0x0000000000001efb      0x220 C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
  .debug_line    0x000000000000211b       0xa5 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
  .debug_line    0x00000000000021c0       0xdd c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
  .debug_line    0x000000000000229d       0xe3 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memset.o)
@@ -887,7 +887,7 @@ LOAD stack
  .debug_str     0x0000000000002aa5      0x7e6 build/default/debug/wall_following.o
  .debug_str     0x000000000000328b      0x421 build/default/debug/line_following.o
  .debug_str     0x00000000000036ac      0x3d1 build/default/debug/check_sensors.o
- .debug_str     0x0000000000003a7d      0x9f6 C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+ .debug_str     0x0000000000003a7d      0x9f6 C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
  .debug_str     0x0000000000004473      0x209 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
  .debug_str     0x000000000000467c      0x21c c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
  .debug_str     0x0000000000004898      0x21e c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memset.o)
@@ -926,7 +926,7 @@ LOAD stack
  .debug_frame   0x00000000000005a0      0x214 build/default/debug/wall_following.o
  .debug_frame   0x00000000000007b4       0x50 build/default/debug/line_following.o
  .debug_frame   0x0000000000000804       0xb8 build/default/debug/check_sensors.o
- .debug_frame   0x00000000000008bc       0x30 C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+ .debug_frame   0x00000000000008bc       0x30 C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
  .debug_frame   0x00000000000008ec       0x48 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
  .debug_frame   0x0000000000000934       0x2c c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
  .debug_frame   0x0000000000000960       0x20 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memset.o)
@@ -952,7 +952,7 @@ LOAD stack
 
 .debug_ranges   0x0000000000000000      0x2c0
  .debug_ranges  0x0000000000000000       0x18 build/default/debug/wall_following.o
- .debug_ranges  0x0000000000000018       0x18 C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+ .debug_ranges  0x0000000000000018       0x18 C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
  .debug_ranges  0x0000000000000030       0x20 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
  .debug_ranges  0x0000000000000050       0x10 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
  .debug_ranges  0x0000000000000060       0x10 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memset.o)
@@ -1159,7 +1159,7 @@ LOAD stack
  .bss           0x0000000000000000        0x0 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libc-size-musl.a(memcmp.o)
 
 .bss%z27        0x0000000000000000        0x0
- .bss           0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+ .bss           0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
 
 .bss%z28        0x0000000000000000        0x0
  .bss           0x0000000000000000        0x0 build/default/debug/check_sensors.o
@@ -1277,7 +1277,7 @@ LOAD stack
  .data          0x0000000000000000        0x0 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
 
 .data%z63       0x0000000000000000        0x0
- .data          0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+ .data          0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
 
 .data%z64       0x0000000000000000        0x0
  .data          0x0000000000000000        0x0 build/default/debug/check_sensors.o
@@ -1432,7 +1432,7 @@ LOAD stack
 .text.Reset_Handler%30
                 0x0000000000004b20       0x7e
  .text.Reset_Handler
-                0x0000000000004b20       0x7e C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+                0x0000000000004b20       0x7e C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
                 0x0000000000004b20                Reset_Handler
 
 .text.__pad%31  0x0000000000004b9e       0x7a
@@ -1644,7 +1644,7 @@ LOAD stack
 .text.Dummy_Handler%68
                 0x00000000000041b2        0x2
  .text.Dummy_Handler
-                0x00000000000041b2        0x2 C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+                0x00000000000041b2        0x2 C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
                 0x00000000000041b2                SVCall_Handler
                 0x00000000000041b2                SERCOM0_2_Handler
                 0x00000000000041b2                EVSYS_0_Handler
@@ -1807,7 +1807,7 @@ LOAD stack
  .text          0x0000000000000000        0x0 c:/program files/microchip/xc32/v4.60/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp\libpic32c.a(data_init.o)
 
 .text%z100      0x0000000000000000        0x0
- .text          0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccohv5sZ.o
+ .text          0x0000000000000000        0x0 C:\Users\Jami\AppData\Local\Temp\ccX6mvHg.o
 
 .text%z101      0x0000000000000000        0x0
  .text          0x0000000000000000        0x0 build/default/debug/wireless.o

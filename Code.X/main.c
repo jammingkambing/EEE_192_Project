@@ -113,7 +113,7 @@ typedef struct prog_state_type
 	// Transmit stuff
 	struct platform_ro_buf_desc tx_desc[35];
 	uint16_t tx_nr_desc;
-	char	tx_buf[60];
+	char	tx_buf[100];
 	unsigned int tx_buf_len;
 	unsigned int idx_color_schem;
     
@@ -227,9 +227,11 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
             case 3: 
             ps->tx_desc[ps->tx_nr_desc].buf = "WALL-FOLLOWING";
             ps->tx_desc[ps->tx_nr_desc].len = 14;
+            break;
             case 4:
             ps->tx_desc[ps->tx_nr_desc].buf = "SAFE";
             ps->tx_desc[ps->tx_nr_desc].len = 4;
+            break;
         }
         ps->tx_nr_desc += 1;
         
@@ -298,6 +300,7 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
         ps->tx_desc[ps->tx_nr_desc].buf = "Wala?!";
         ps->tx_desc[ps->tx_nr_desc].len = 6;
         ps->tx_nr_desc += 1;
+        
 	}
 
 	// Enqueue them for transmission
@@ -500,8 +503,6 @@ int main(void) {
            case 3:
                wall_following_algorithm();
                break;
-           
-
      }
     }
 }
