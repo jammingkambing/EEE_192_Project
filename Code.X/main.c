@@ -42,21 +42,14 @@ static const char banner_msg[] =
 "\r\n"
 "Mode: "        // 16
 "\r\n"
-"US"            // 17
+"IR"            // 17
 "\r\n"
 "LEFT: "        // 18
 "\r\n"
 "CENTER: "      //19
 "\r\n"
 "RIGHT: "       // 20
-"\r\n"
-"IR"            // 21
-"\r\n"
-"LEFT: "        // 22
-"\r\n"
-"CENTER: "      // 23
-"\r\n"
-"RIGHT: ";      // 24
+"\r\n";      // 24
 
 // Escape sequence prepended to the start of the sequence display
 #define ESC_SEQ_BLINKMODE "\033[14;20H\033[0K"
@@ -277,30 +270,6 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
         }
         ps->tx_nr_desc += 1;
         
-        ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_US_LEFT;
-		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_US_LEFT)-1;
-        ps->tx_nr_desc += 1;
-        
-        ps->tx_desc[ps->tx_nr_desc].buf = "Wala?!";
-        ps->tx_desc[ps->tx_nr_desc].len = 6;
-        ps->tx_nr_desc += 1;
-        
-        ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_US_CENTER;
-		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_US_CENTER)-1;
-        ps->tx_nr_desc += 1;
-        
-        ps->tx_desc[ps->tx_nr_desc].buf = "Wala?!";
-        ps->tx_desc[ps->tx_nr_desc].len = 6;
-        ps->tx_nr_desc += 1;
-
-        ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_US_RIGHT;
-		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_US_RIGHT)-1;
-        ps->tx_nr_desc += 1;
-        
-        ps->tx_desc[ps->tx_nr_desc].buf = "Wala?!";
-        ps->tx_desc[ps->tx_nr_desc].len = 6;
-        ps->tx_nr_desc += 1;
-        
 	}
 
 	// Enqueue them for transmission
@@ -445,11 +414,16 @@ int main(void) {
     
     for (;;) {
       
+        if (ts_delta >= (80/PLATFORM_TICK_MS)) {
+            // At least 80 ms have elapsed
+            tick_ctrs.sweep = ts_curr;
+            ir_left_status = ir_left();
+            ir_center_status = ir_center();
+            ir_right_status = ir_right();
+            ps.tx_flags = 0x0002;
+        }
         
-       ir_left_status = ir_left();
-       ir_center_status = ir_center();
-       ir_right_status = ir_right();
-       
+        
        ts_curr = platform_systick_count();
        ts_delta = platform_tick_delta(ts_curr, tick_ctrs.sweep);
        
@@ -491,13 +465,6 @@ int main(void) {
              }
             break;
            case 2:
-               if (ts_delta >= (80/PLATFORM_TICK_MS)) {
-                    // At least 80 ms have elapsed
-                    tick_ctrs.sweep = ts_curr;
-                    ir_left_status = ir_left();
-                    ir_center_status = ir_center();
-                    ir_right_status = ir_right();
-                }
                line_following_algorithm(ir_left_status, ir_center_status, ir_right_status);
                break;
            case 3:
