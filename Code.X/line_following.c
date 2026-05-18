@@ -14,20 +14,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// SENSOR OUTPUT:
+//       BLACK IS HIGH (1)
+//       DETECTION/ WHITE IS LOW (0)
+
 #define BASE_SPEED_A 30
 #define BASE_SPEED_B 33
 
-#define TURN_RIGHT_SPEED_A 30 // for sharper turn, increase A
-#define TURN_RIGHT_SPEED_B 30
+#define TURN_RIGHT_SPEED_A 21 // for sharper turn, increase A
+#define TURN_RIGHT_SPEED_B 21
 
-#define TURN_LEFT_SPEED_A 30 // for sharper turn, increase B
-#define TURN_LEFT_SPEED_B 30
+#define TURN_LEFT_SPEED_A 21 // for sharper turn, increase B
+#define TURN_LEFT_SPEED_B 21
 
-#define SLIGHT_TURN_RIGHT_SPEED_A 35 // for sharper turn, increase A
-#define SLIGHT_TURN_RIGHT_SPEED_B 20
+#define SLIGHT_TURN_RIGHT_SPEED_A 15 // for sharper turn, increase A
+#define SLIGHT_TURN_RIGHT_SPEED_B 15
 
-#define SLIGHT_TURN_LEFT_SPEED_A 25 // for sharper turn, increase B
-#define SLIGHT_TURN_LEFT_SPEED_B 20
+#define SLIGHT_TURN_LEFT_SPEED_A 15 // for sharper turn, increase B
+#define SLIGHT_TURN_LEFT_SPEED_B 15
 
 static int a_speed = 0;
 static int b_speed = 0;
@@ -62,9 +66,7 @@ void line_following_algorithm(bool left, bool center, bool right)
         go_forward();
         a_speed = BASE_SPEED_A;
         b_speed = BASE_SPEED_B;
-        for (int i = 0; i< 25; i++) {
-            set_motors(a_speed, b_speed);
-        }
+        set_motors(a_speed, b_speed);
         last_error = 0;
         return;  
     }
@@ -74,8 +76,8 @@ void line_following_algorithm(bool left, bool center, bool right)
         // Force LEFT (1 0 1)
         turn_left();
 
-        a_speed = TURN_LEFT_SPEED_A;
-        b_speed = TURN_LEFT_SPEED_B;
+        a_speed = SLIGHT_TURN_LEFT_SPEED_A;
+        b_speed = SLIGHT_TURN_LEFT_SPEED_B;
 
         set_motors(a_speed, b_speed);
         last_error = -2;  //last direction

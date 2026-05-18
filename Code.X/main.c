@@ -413,7 +413,7 @@ int main(void) {
     ir_center_status = ir_center();
     ir_right_status = ir_right();
     
-    idx_message = 2;
+    idx_message = 3;
     
     for (;;) {
       
