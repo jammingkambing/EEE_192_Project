@@ -134,8 +134,8 @@ void platform_usart_cdc_init(void)
 	 * Select further settings compatible with the 16550 UART:
 	 *
 	 * - LSB first
-	 * - No parity
-	 * - One stop bit
+	 * - Even parity
+	 * - Two stop bits
 	 * - 8-bit character size
 	 * - No break detection
 	 * - With FIFO, 32-bit extensions disabled
@@ -149,9 +149,10 @@ void platform_usart_cdc_init(void)
 	 *       as they will only clear when the buffer is empty and filled,
 	 *       respectively.
 	 */
-	SERCOM_CDC_REGS->SERCOM_CTRLA |= 0x00100000;
+	SERCOM_CDC_REGS->SERCOM_CTRLA |= 0x01000000;
 	SERCOM_CDC_REGS->SERCOM_CTRLB  = 0x00000000;
 	SERCOM_CDC_REGS->SERCOM_CTRLC  = 0x08000000;
+
 	/*
 	 * In asynchronous USART mode (USART_EXT or USART_INT, CMODE=0), the baud rate
 	 * for the bitstream is determined according to the following formula:

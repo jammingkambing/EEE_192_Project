@@ -69,12 +69,10 @@ void platform_init_late(void)
 	EIC_init_late();
     TCC_init_late();
     
+    // change this to sercom3 for pb08, pb09
     NVIC_SetPriority(SERCOM3_0_IRQn, 3);		// usart.c
 	NVIC_SetPriority(SERCOM3_2_IRQn, 3);		// usart.c
-	
-
-	NVIC_EnableIRQ(SERCOM3_0_IRQn);
-	NVIC_EnableIRQ(SERCOM3_2_IRQn);
+   
 	return;
 }
 

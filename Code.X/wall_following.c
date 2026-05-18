@@ -53,7 +53,7 @@ extern void stop(void);
 #define MIN_EFFECTIVE_SPEED   20
 
 int set_a_speed(int speed_percent) {
-    if (speed_percent < 0) speed_percent = 0;
+    if (speed_percent < 0) speed_percent = MIN_EFFECTIVE_SPEED;
     if (speed_percent > 100) speed_percent = 100;
     if (speed_percent > 0 && speed_percent < MIN_EFFECTIVE_SPEED)
         speed_percent = MIN_EFFECTIVE_SPEED;
@@ -64,7 +64,7 @@ int set_a_speed(int speed_percent) {
 }
 
 int set_b_speed(int speed_percent) {
-    if (speed_percent < 0) speed_percent = 0;
+    if (speed_percent < 0) speed_percent = MIN_EFFECTIVE_SPEED;
     if (speed_percent > 100) speed_percent = 100;
     if (speed_percent > 0 && speed_percent < MIN_EFFECTIVE_SPEED)
         speed_percent = MIN_EFFECTIVE_SPEED;
@@ -210,6 +210,7 @@ uint32_t left_raw_to_cm(uint32_t raw) {
 
 // ------------------------ SEND TO PUTTY ------------------------
 void send_string(const char* str) {
+    if (0) {
     while (platform_usart_cdc_tx_busy()) {
         for (volatile int i = 0; i < 100; i++);
     }
@@ -218,6 +219,7 @@ void send_string(const char* str) {
     while (platform_usart_cdc_tx_busy()) {
         for (volatile int i = 0; i < 100; i++);
     }
+}
 }
 
 // ------------------------ DECISION TO TEXT (display) ------------------------

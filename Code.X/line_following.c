@@ -64,8 +64,8 @@ void line_following_algorithm(bool left, bool center, bool right)
     if(left && center && right)
     {   
         go_forward();
-        a_speed = BASE_SPEED_A;
-        b_speed = BASE_SPEED_B;
+        a_speed = 30;
+        b_speed = 33;
         set_motors(a_speed, b_speed);
         last_error = 0;
         return;  
@@ -90,11 +90,20 @@ void line_following_algorithm(bool left, bool center, bool right)
     {
         // SLIGHT TURN LEFT
         
+        if (0) {
         turn_left();
         a_speed = SLIGHT_TURN_LEFT_SPEED_A;
         b_speed = SLIGHT_TURN_LEFT_SPEED_B;
         set_motors(a_speed, b_speed);
         return;
+        }
+        else {
+            go_backward();
+            a_speed = 30;
+            b_speed = 30;
+            set_motors(a_speed, b_speed);
+            return;
+        }
     }
 
     // 1 0 0  LEFT
