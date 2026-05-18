@@ -14,14 +14,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BASE_SPEED 20
-#define TURN_SPEED 10
-
-#define BASE_SPEED_A 33
-#define BASE_SPEED_B 30
-
-#define TURN_SPEED_A 10 
-#define TURN_SPEED_B 20
+#define BASE_SPEED_A 30
+#define BASE_SPEED_B 33
 
 #define TURN_RIGHT_SPEED_A 30 // for sharper turn, increase A
 #define TURN_RIGHT_SPEED_B 30
@@ -29,11 +23,11 @@
 #define TURN_LEFT_SPEED_A 30 // for sharper turn, increase B
 #define TURN_LEFT_SPEED_B 30
 
-#define SLIGHT_TURN_RIGHT_SPEED_A 30 // for sharper turn, increase A
-#define SLIGHT_TURN_RIGHT_SPEED_B 30
+#define SLIGHT_TURN_RIGHT_SPEED_A 35 // for sharper turn, increase A
+#define SLIGHT_TURN_RIGHT_SPEED_B 20
 
 #define SLIGHT_TURN_LEFT_SPEED_A 25 // for sharper turn, increase B
-#define SLIGHT_TURN_LEFT_SPEED_B 10
+#define SLIGHT_TURN_LEFT_SPEED_B 20
 
 static int a_speed = 0;
 static int b_speed = 0;
@@ -80,8 +74,8 @@ void line_following_algorithm(bool left, bool center, bool right)
         // Force LEFT (1 0 1)
         turn_left();
 
-        a_speed = TURN_SPEED_A;
-        b_speed = 25;
+        a_speed = TURN_LEFT_SPEED_A;
+        b_speed = TURN_LEFT_SPEED_B;
 
         set_motors(a_speed, b_speed);
         last_error = -2;  //last direction
@@ -92,24 +86,12 @@ void line_following_algorithm(bool left, bool center, bool right)
     // Line Lost (0 0 0) ALL WHITE DETECTED
     if(!left && !center && !right)
     {
-        // STOP completely
+        // SLIGHT TURN LEFT
         
-        if (0) {
-            stop();
-
-        a_speed = 30;
-        b_speed = 30;
-        set_motors(a_speed, b_speed);
-
-        last_error = 0;  // reset state
-        }
- 
-        else {
         turn_left();
-        a_speed = 25;
-        b_speed = 10;
+        a_speed = SLIGHT_TURN_LEFT_SPEED_A;
+        b_speed = SLIGHT_TURN_LEFT_SPEED_B;
         set_motors(a_speed, b_speed);
-        }
         return;
     }
 
@@ -118,8 +100,8 @@ void line_following_algorithm(bool left, bool center, bool right)
     {
         turn_left();
             
-        a_speed = TURN_SPEED_A;
-        b_speed = 25;
+        a_speed = TURN_LEFT_SPEED_A;
+        b_speed = TURN_LEFT_SPEED_B;
 
         set_motors(a_speed, b_speed);
         last_error = -2;
@@ -136,8 +118,8 @@ void line_following_algorithm(bool left, bool center, bool right)
         b_speed = (BASE_SPEED_B + 5); //for slight turn
         }
         else {
-            a_speed = 30;
-            b_speed = 30;
+            a_speed = SLIGHT_TURN_LEFT_SPEED_A;
+            b_speed = SLIGHT_TURN_LEFT_SPEED_B;
         }
 
         set_motors(a_speed, b_speed);
@@ -150,8 +132,8 @@ void line_following_algorithm(bool left, bool center, bool right)
     {
         turn_right();
 
-        a_speed = BASE_SPEED_A;
-        b_speed = TURN_SPEED_B;
+        a_speed = TURN_RIGHT_SPEED_A;
+        b_speed = TURN_RIGHT_SPEED_B;
 
         set_motors(a_speed, b_speed);
         last_error = 2;
@@ -163,14 +145,8 @@ void line_following_algorithm(bool left, bool center, bool right)
     {
         turn_right();
 
-        if (1) {
-        a_speed =  (BASE_SPEED_A + 5); // slight turn 
-        b_speed = BASE_SPEED_B;
-        }
-        else {
-            a_speed = 30;
-        b_speed = 30;
-        }
+        a_speed = SLIGHT_TURN_RIGHT_SPEED_A;
+        b_speed = SLIGHT_TURN_RIGHT_SPEED_B;
 
         set_motors(a_speed, b_speed);
         last_error = 1;
@@ -198,35 +174,3 @@ void line_following_algorithm(bool left, bool center, bool right)
     return;
 
 }
-
-
-
-// SENSOR OUTPUT:
-//       BLACK IS HIGH (1)
-//       DETECTION/ WHITE IS LOW (0)
-
-
-
-
-
-
-
-
-
-
-//if(!left && !center && !right)
-//{
-//    if(last_error < 0) turn_left();
-//    else if(last_error > 0) turn_right();
-//
-//    a_speed = TURN_SPEED;
-//    b_speed = TURN_SPEED;
-//    set_motors(a_speed, b_speed);
-//
-//    delay_ms(50);
-//
-//    stop();
-//    set_motors(0, 0);
-//
-//    return;
-//}

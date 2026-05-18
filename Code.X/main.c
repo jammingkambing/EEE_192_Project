@@ -299,7 +299,6 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 			// Fall through
 		} else {
 			// No message received yet
-            stop();
             setting = 0;
 			break;
 		}
@@ -410,7 +409,11 @@ int main(void) {
     
     ps.tx_flags = 0x0001;
     
-    idx_message = 1;
+    ir_left_status = ir_left();
+    ir_center_status = ir_center();
+    ir_right_status = ir_right();
+    
+    idx_message = 2;
     
     for (;;) {
       
@@ -430,6 +433,10 @@ int main(void) {
        prog_loop_do_one_tx(&ps, idx_message);
        prog_loop_do_one_rx(&ps);
        
+       // for calibration
+       //idx_message = 1;
+       //setting = 1;
+       
        switch (idx_message) {
            case 1:
             switch (setting) {
@@ -438,8 +445,8 @@ int main(void) {
                     break;
                 case 1:
                     go_forward();
-                    a_speed = 50;
-                    b_speed = 35;
+                    a_speed = 30;
+                    b_speed = 33;
                     break;
                 case 2: 
                     go_backward();
