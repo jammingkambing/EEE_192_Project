@@ -30,18 +30,18 @@ extern void stop(void);
 #define DEADBAND              2     // ignore errors within ±1 cm
 
 // ------------------------ MOTOR SPEEDS  ------------------------
-#define BASE_SPEED_LEFT       25     
-#define BASE_SPEED_RIGHT      25    
-#define MAX_SPEED             30    
-#define MIN_SPEED             10    
+#define BASE_SPEED_LEFT       30     
+#define BASE_SPEED_RIGHT      30    
+#define MAX_SPEED             40    
+#define MIN_SPEED             20    
 
 // ------------------------ TURN CALIBRATIONS ------------------------
 #define TURN_RIGHT_MS         250   // 90° right turn; 460; 700
-#define TURN_RIGHT_SPEED      25    
+#define TURN_RIGHT_SPEED      50   
 #define TURN_LEFT_MS          115   // 90° left turn 
-#define TURN_LEFT_SPEED       25    
+#define TURN_LEFT_SPEED       250  
 #define TURN_AROUND_MS        450    // 180° turn; 85
-#define TURN_AROUND_SPEED     25    
+#define TURN_AROUND_SPEED     50    
 
 
 #define FORWARD_AFTER_TURN_MS 3000  
@@ -49,33 +49,29 @@ extern void stop(void);
 #define BALANCE_OFFSET        0
 
 // ------------------------ LOCAL SPEED CONTROL ------------------------
-#define MAX_PWM               99
-#define MIN_EFFECTIVE_SPEED   10
+#define MAX_PWM               100
+#define MIN_EFFECTIVE_SPEED   20
 
 int set_a_speed(int speed_percent) {
-    int pwm;
     if (speed_percent < 0) speed_percent = 0;
     if (speed_percent > 100) speed_percent = 100;
     if (speed_percent > 0 && speed_percent < MIN_EFFECTIVE_SPEED)
         speed_percent = MIN_EFFECTIVE_SPEED;
-    pwm = (speed_percent * MAX_PWM) / 100;
     if ((TCC3_REGS->TCC_SYNCBUSY & 0x00000080) == 0) {
-        TCC3_REGS->TCC_CCBUF[1] = pwm;   // motor A = right wheel
+        TCC3_REGS->TCC_CCBUF[1] = speed_percent;   // motor A = right wheel
     }
-    return pwm;
+    return speed_percent;
 }
 
 int set_b_speed(int speed_percent) {
-    int pwm;
     if (speed_percent < 0) speed_percent = 0;
     if (speed_percent > 100) speed_percent = 100;
     if (speed_percent > 0 && speed_percent < MIN_EFFECTIVE_SPEED)
         speed_percent = MIN_EFFECTIVE_SPEED;
-    pwm = (speed_percent * MAX_PWM) / 100;
     if ((TCC3_REGS->TCC_SYNCBUSY & 0x00000080) == 0) {
-        TCC3_REGS->TCC_CCBUF[0] = pwm;   // motor B = left wheel
+        TCC3_REGS->TCC_CCBUF[0] = speed_percent;   // motor B = left wheel
     }
-    return pwm;
+    return speed_percent;
 }
 
 // ------------------------ DEBOUNCE & COOLDOWN ------------------------
@@ -288,8 +284,8 @@ void wall_following_algorithm(void) {
     if (!initialized) {
         initialized = 1;
         init_sensor_pins();
-        //send_string("\033[2J\033[H");               // clear screen once
-        //send_string("\r\n=== RIGHT HAND RULE (SPIN TURNS, ANTI-SLAM, STUCK DETECT) ===\r\n");
+        send_string("\033[2J\033[H");               // clear screen once
+        send_string("\r\n=== RIGHT HAND RULE (SPIN TURNS, ANTI-SLAM, STUCK DETECT) ===\r\n");
         //delay_ms(100);
     }
 
@@ -331,7 +327,7 @@ void wall_following_algorithm(void) {
         set_a_speed(-ANTI_SLAM_REVERSE_SPEED);
         //delay_ms(ANTI_SLAM_DURATION);
         // stop();
-        //send_string("ANTI-SLAM: front reverse\r\n");
+        send_string("ANTI-SLAM: front reverse\r\n");
         //delay_ms(20);
         return;
     }
@@ -340,7 +336,7 @@ void wall_following_algorithm(void) {
         set_b_speed(ANTI_SLAM_SPEED);
         set_a_speed(0);
         //delay_ms(ANTI_SLAM_DURATION);
-        //send_string("ANTI-SLAM: left pivot right\r\n");
+        send_string("ANTI-SLAM: left pivot right\r\n");
         //delay_ms(20);
         return;
     }
@@ -349,7 +345,7 @@ void wall_following_algorithm(void) {
         set_b_speed(0);
         set_a_speed(ANTI_SLAM_SPEED);
         //delay_ms(ANTI_SLAM_DURATION);
-        //send_string("ANTI-SLAM: right pivot left\r\n");
+        send_string("ANTI-SLAM: right pivot left\r\n");
         //delay_ms(20);
         return;
     }
@@ -358,7 +354,7 @@ void wall_following_algorithm(void) {
 
     if (front_cm <= FRONT_THRESHOLD_CM && right_cm <= SIDE_THRESHOLD_CM && left_cm <= SIDE_THRESHOLD_CM) {
         if (state != TURN_AROUND && state != TURN_LEFT && state != TURN_RIGHT) {
-            //send_string(">>> DEAD END -> 180° SPIN <<<\r\n");
+            send_string(">>> DEAD END -> 180° SPIN <<<\r\n");
             state = TURN_AROUND;
             turn_ongoing = 1;
             turn_start_time = current_time;
@@ -369,7 +365,7 @@ void wall_following_algorithm(void) {
     }
     else if (front_cm <= FRONT_THRESHOLD_CM && right_cm <= SIDE_THRESHOLD_CM) {
         if (state != TURN_LEFT && state != TURN_RIGHT && state != TURN_AROUND) {
-            //send_string(">>> FRONT+RIGHT -> LEFT SPIN <<<\r\n");
+            send_string(">>> FRONT+RIGHT -> LEFT SPIN <<<\r\n");
             state = TURN_LEFT;
             turn_ongoing = 1;
             turn_start_time = current_time;
@@ -393,7 +389,7 @@ void wall_following_algorithm(void) {
             if (right_cm == last_right_cm) {
                 stuck_counter++;
                 if (stuck_counter >= STUCK_THRESHOLD && turn_cooldown_end == 0 && turn_ongoing == 0 && state == FOLLOW) {
-                    //send_string(">>> STUCK DETECTED! Recovering...\r\n");
+                    send_string(">>> STUCK DETECTED! Recovering...\r\n");
                     turn_right();
                     set_b_speed(-STUCK_RECOVER_SPEED);
                     set_a_speed(-STUCK_RECOVER_SPEED);
@@ -438,7 +434,7 @@ void wall_following_algorithm(void) {
                     state = TURN_RIGHT;
                     turn_ongoing = 1;
                     turn_start_time = current_time;
-                    //send_string("\nWall lost -> right spin\r\n");
+                    send_string("\nWall lost -> right spin\r\n");
                     turn_right();
                     set_b_speed(TURN_RIGHT_SPEED);
                     set_a_speed(TURN_RIGHT_SPEED);
@@ -453,7 +449,7 @@ void wall_following_algorithm(void) {
         case TURN_RIGHT:
             if (turn_ongoing && platform_tick_delta(current_time, turn_start_time) >= (TURN_RIGHT_MS / PLATFORM_MS_PER_SYSTICK)) {
                 turn_ongoing = 0; state = SEEK; turn_cooldown_end = current_time + (TURN_COOLDOWN_MS / PLATFORM_MS_PER_SYSTICK);
-                //send_string("Right spin done -> SEEK\r\n");
+                send_string("Right spin done -> SEEK\r\n");
                 seek_start_time = current_time;
                 stuck_counter = 0;
             }
@@ -462,7 +458,7 @@ void wall_following_algorithm(void) {
         case TURN_LEFT:
             if (turn_ongoing && platform_tick_delta(current_time, turn_start_time) >= (TURN_LEFT_MS / PLATFORM_MS_PER_SYSTICK)) {
                 turn_ongoing = 0; state = SEEK; turn_cooldown_end = current_time + (TURN_COOLDOWN_MS / PLATFORM_MS_PER_SYSTICK);
-                //send_string("Left spin done -> SEEK\r\n");
+                send_string("Left spin done -> SEEK\r\n");
                 seek_start_time = current_time;
                 stuck_counter = 0;
             }
@@ -471,7 +467,7 @@ void wall_following_algorithm(void) {
         case TURN_AROUND:
             if (turn_ongoing && platform_tick_delta(current_time, turn_start_time) >= (TURN_AROUND_MS / PLATFORM_MS_PER_SYSTICK)) {
                 turn_ongoing = 0; state = SEEK; turn_cooldown_end = current_time + (TURN_COOLDOWN_MS / PLATFORM_MS_PER_SYSTICK);
-                //send_string("180° spin done -> SEEK\r\n");
+                send_string("180° spin done -> SEEK\r\n");
                 seek_start_time = current_time;
                 stuck_counter = 0;
             }
@@ -479,19 +475,19 @@ void wall_following_algorithm(void) {
 
         case SEEK:
             go_forward(); set_b_speed(BASE_SPEED_LEFT); set_a_speed(BASE_SPEED_RIGHT);
-            //send_string("SEEK mode\r");
+            send_string("SEEK mode\r");
             if (right_cm <= SIDE_THRESHOLD_CM) {
                 seek_wall_detected_counter++;
                 if (seek_wall_detected_counter >= SEEK_DEBOUNCE_COUNT) {
                     state = FOLLOW; seek_wall_detected_counter = 0;
-                    //send_string("Wall found -> FOLLOW\r\n");
+                    send_string("Wall found -> FOLLOW\r\n");
                 }
             } else {
                 seek_wall_detected_counter = 0;
             }
             if (platform_tick_delta(current_time, seek_start_time) >= (SEEK_TIMEOUT_MS / PLATFORM_MS_PER_SYSTICK)) {
                 // stop();
-                //send_string("SEEK timeout: no wall found, stopping\r\n");
+                send_string("SEEK timeout: no wall found, stopping\r\n");
                // while(1);
             }
             break;
