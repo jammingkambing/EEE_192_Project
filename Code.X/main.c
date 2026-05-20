@@ -106,7 +106,7 @@ typedef struct prog_state_type
 	unsigned int state_id;
 	
 	// Transmit stuff
-	struct platform_ro_buf_desc tx_desc[20];
+	struct platform_ro_buf_desc tx_desc[25];
 	uint16_t tx_nr_desc;
 	char	tx_buf[60];
 	unsigned int tx_buf_len;
@@ -390,13 +390,6 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 	}
 }
 
-void delay_ms(int ms)
-{
-    for(int i = 0; i < ms; i++)
-    {
-        for(volatile int j = 0; j < 4000; j++);
-    }
-}
 
 int main(void) {
     
@@ -418,7 +411,7 @@ int main(void) {
     ir_center_status = ir_center();
     ir_right_status = ir_right();
     
-    idx_message = 3;
+    idx_message = 2;
     
     for (;;) {
       

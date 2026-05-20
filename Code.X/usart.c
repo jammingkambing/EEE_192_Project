@@ -178,8 +178,8 @@ void platform_usart_cdc_init(void)
 	 * the closest one should be selected to minimize the resulting bit-
 	 * error rate.
 	 */
-	//SERCOM_CDC_REGS->SERCOM_BAUD = 50437;	// 57600 baud
-    SERCOM_CDC_REGS->SERCOM_BAUD = 63019; //9600 baud
+	SERCOM_CDC_REGS->SERCOM_BAUD = 50437;	// 57600 baud
+    //SERCOM_CDC_REGS->SERCOM_BAUD = 63019; //9600 baud
 
 	/*
 	 * Third-to-the-last setup:
