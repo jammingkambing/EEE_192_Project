@@ -106,7 +106,7 @@ typedef struct prog_state_type
 	unsigned int state_id;
 	
 	// Transmit stuff
-	struct platform_ro_buf_desc tx_desc[25];
+	struct platform_ro_buf_desc tx_desc[32];
 	uint16_t tx_nr_desc;
 	char	tx_buf[60];
 	unsigned int tx_buf_len;
@@ -399,7 +399,8 @@ int main(void) {
 		unsigned int sweep;
 	} tick_ctrs;
     tick_ctrs.sweep = 0;
-    unsigned int ts_delta, ts_curr;
+    unsigned int ts_delta = 0;
+    unsigned int ts_curr = 0;
     
     platform_init_early();
     platform_usart_cdc_init();
@@ -411,7 +412,7 @@ int main(void) {
     ir_center_status = ir_center();
     ir_right_status = ir_right();
     
-    idx_message = 2;
+    idx_message = 3;
     
     for (;;) {
       

@@ -333,7 +333,7 @@ void wall_following_algorithm(void) {
         init_sensor_pins();
         PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 15);  // PA15 for safe mode LED
         safe_mode_led(0);
-           
+        send_string("\033[2J\033[H");   // clear screen once
     }
 
     static enum { FOLLOW, TURN_RIGHT, TURN_LEFT, TURN_AROUND, SEEK } state = FOLLOW;
@@ -391,8 +391,9 @@ void wall_following_algorithm(void) {
                     stagnation_triggered = 1;
                     safe_mode_led(2);  // special code for safe mode (fast blink)
                     stop();
-                   
-                    
+                    send_string(">>> SAFE MODE ACTIVATED! Robot stopped.\r\n");
+                    send_string(">>> Reset to continue.\r\n");
+                    // Stay in safe mode forever
                     while(1);
                 } else {
                     // Normal reverse (no LED blink)

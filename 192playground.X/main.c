@@ -23,11 +23,6 @@ int speed = 0;
 int setting;
 char setting_ptr[9];
 
-int turn_right_speed = 25;
-int turn_left_speed = 25;
-int slight_turn_right_speed = 25;
-int slight_turn_left_speed = 25;
-
 static const char banner_msg[] =
 "\033[2J\033[1;1H"
 "+----------------------------------------------------------------+\r\n"
@@ -68,8 +63,6 @@ static const char banner_msg[] =
 #define ESC_SEQ_US_LEFT "\033[22;20H\033[0K"
 #define ESC_SEQ_US_CENTER "\033[23;20H\033[0K"
 #define ESC_SEQ_US_RIGHT "\033[24;20H\033[0K"
-#define ESC_SEQ_RSPEED "\033[26;20H\033[0K"
-#define ESC_SEQ_LSPEED "\033[27;20H\033[0K"
 
 
 // List of color schemes...
@@ -204,13 +197,13 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
 		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_BRIGHTNESS)-1;
         ps->tx_nr_desc += 1;
 
-         ps->tx_desc[ps->tx_nr_desc].len = snprintf(
-				turn_right_speed,
-				4,
-				"%u",
-                (turn_right_speed)
-			);
-        ps->tx_desc[ps->tx_nr_desc].buf = turn_right_speed;
+        switch (speed) {
+            case 0:
+            ps->tx_desc[ps->tx_nr_desc].buf = "placeholder";
+            ps->tx_desc[ps->tx_nr_desc].len = 11;
+            break;
+        }
+        
         ps->tx_nr_desc += 1;
         
         ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_MESSAGE;
@@ -279,32 +272,6 @@ static void prog_loop_do_one_tx(prog_state_t *ps, int idx_message)
         }
         ps->tx_nr_desc += 1;
         
-        ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_RSPEED;
-		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_RSPEED)-1;
-        ps->tx_nr_desc += 1;
-
-         ps->tx_desc[ps->tx_nr_desc].len = snprintf(
-				turn_right_speed,
-				4,
-				"%u",
-                (turn_right_speed)
-			);
-        ps->tx_desc[ps->tx_nr_desc].buf = turn_right_speed;
-        ps->tx_nr_desc += 1;
-        
-        ps->tx_desc[ps->tx_nr_desc].buf = ESC_SEQ_LSPEED;
-		ps->tx_desc[ps->tx_nr_desc].len = sizeof(ESC_SEQ_LSPEED)-1;
-        ps->tx_nr_desc += 1;
-
-         ps->tx_desc[ps->tx_nr_desc].len = snprintf(
-				turn_left_speed,
-				4,
-				"%u",
-                (turn_right_speed)
-			);
-        ps->tx_desc[ps->tx_nr_desc].buf = turn_right_speed;
-        ps->tx_nr_desc += 1;
-        
 	}
 
 	// Enqueue them for transmission
@@ -347,21 +314,6 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
          
         ps->tx_flags |= 0x0002;
 		ps->state_id += 1;
-        
-        if (ps->rx_info.len == 1) {
-            if (ps->rx_info.buf[0] == 'w' || ps->rx_info.buf[0] == 'W') {
-                turn_right_speed += 1;
-            }
-            if (ps->rx_info.buf[0] == 'a' || ps->rx_info.buf[0] == 'A') {
-                turn_left_speed -= 1;
-            }
-            if (ps->rx_info.buf[0] == 's' || ps->rx_info.buf[0] == 'S') {
-                turn_right_speed -= 1;
-            }
-            if (ps->rx_info.buf[0] == 'd' || ps->rx_info.buf[0] == 'D') {
-                turn_left_speed += 1;
-            }
-        }
         
         //arrows
         if (ps->rx_info.len == 3 && ps->rx_info.buf[1] == 0x5B) {
@@ -438,13 +390,6 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 	}
 }
 
-void delay_ms(int ms)
-{
-    for(int i = 0; i < ms; i++)
-    {
-        for(volatile int j = 0; j < 4000; j++);
-    }
-}
 
 int main(void) {
     
@@ -522,8 +467,7 @@ int main(void) {
              }
             break;
            case 2:
-               //line_following_algorithm(ir_left_status, ir_center_status, ir_right_status);
-               line_following_algorithm(ir_left_status, ir_center_status, ir_right_status, turn_right_speed, turn_left_speed);
+               line_following_algorithm(ir_left_status, ir_center_status, ir_right_status);
                break;
            case 3:
                wall_following_algorithm();
@@ -531,4 +475,3 @@ int main(void) {
      }
     }
 }
-

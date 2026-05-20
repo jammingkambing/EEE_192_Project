@@ -21,11 +21,11 @@
 #define BASE_SPEED_A 30
 #define BASE_SPEED_B 33
 
-#define TURN_RIGHT_SPEED_A 21 // for sharper turn, increase A
-#define TURN_RIGHT_SPEED_B 21
+#define TURN_RIGHT_SPEED_A 25 // for sharper turn, increase A
+#define TURN_RIGHT_SPEED_B 25
 
-#define TURN_LEFT_SPEED_A 21 // for sharper turn, increase B
-#define TURN_LEFT_SPEED_B 21
+#define TURN_LEFT_SPEED_A 25 // for sharper turn, increase B
+#define TURN_LEFT_SPEED_B 25
 
 #define SLIGHT_TURN_RIGHT_SPEED_A 15 // for sharper turn, increase A
 #define SLIGHT_TURN_RIGHT_SPEED_B 15
@@ -56,9 +56,40 @@ void set_motors(int a_speed, int b_speed) {
 	}
 }
 
-void line_following_algorithm(bool left, bool center, bool right, int turn_right_speed, int turn_left_speed)
+void set_motors_delay(int a_speed, int b_speed, int delay) {
+    for (int i = 0; i < delay; i++) {
+        if ((TCC3_REGS->TCC_SYNCBUSY & 0x00000080) == 0) {
+            TCC3_REGS->TCC_CCBUF[1] = a_speed;
+            TCC3_REGS->TCC_CCBUF[0] = b_speed;
+	}
+    }
+    return;
+}
+
+bool find_line() {
+    if (ir_left() || ir_center() || ir_right()) {
+        return true;
+    }
+    return false;
+}
+
+void line_following_algorithm(bool left, bool center, bool right)
 {
 
+    // 0 1 0  CENTER
+    if(!left && center && !right)
+    {
+        go_forward();
+
+        a_speed = BASE_SPEED_A;
+        b_speed = BASE_SPEED_B;
+
+        set_motors(a_speed, b_speed);
+
+        last_error = 0;
+        return;
+    }
+    
     // Intersection (1 1 1) ALL BLACK DETECTED
     // this is when BLACK is 1 1 1 and White is 0 0 0
     if(left && center && right)
@@ -87,23 +118,56 @@ void line_following_algorithm(bool left, bool center, bool right, int turn_right
 
     // Line Lost (0 0 0) ALL WHITE DETECTED
     if(!left && !center && !right)
-    {
-        // SLIGHT TURN LEFT
+    {   
         
-        if (0) {
-        turn_left();
-        a_speed = SLIGHT_TURN_LEFT_SPEED_A;
-        b_speed = SLIGHT_TURN_LEFT_SPEED_B;
+        a_speed = 0;
+        b_speed = 27;
+        go_forward();
         set_motors(a_speed, b_speed);
+        
+        
+        
+        if (!find_line()) {
+ 
+          
+           for (int i = 0; i<3; i++) {
+               for (int i = 0; i < 5000; i++) {
+                   turn_right();
+                   set_motors(a_speed, b_speed);
+                   if (find_line()) {
+                       return;
+                   }
+               }
+               
+           
+               for (int i = 0; i < 5000; i++) {
+                   turn_left();
+                   set_motors(b_speed, a_speed);
+                   if (find_line()) {
+                       return;
+                   }
+               }
+          
+           }
+           
+           if (find_line()) {
+                       return;
+                   }
+           
+           
+           a_speed = 27;
+           b_speed = 27;
+           for (int i = 0; i < 500000000; i++) {
+           go_backward();
+                set_motors(a_speed, b_speed);
+                if (find_line()) {
+                    return;
+                }
+           }
+           // SAFE MODE HERE
+        }
+        
         return;
-        }
-        else {
-            go_backward();
-            a_speed = 30;
-            b_speed = 30;
-            set_motors(a_speed, b_speed);
-            return;
-        }
     }
 
     // 1 0 0  LEFT
@@ -111,10 +175,8 @@ void line_following_algorithm(bool left, bool center, bool right, int turn_right
     {
         turn_left();
             
-        //a_speed = TURN_LEFT_SPEED_A;
-        //b_speed = TURN_LEFT_SPEED_B;
-        a_speed = turn_left_speed;
-        b_speed = turn_left_speed;
+        a_speed = TURN_LEFT_SPEED_A;
+        b_speed = TURN_LEFT_SPEED_B;
 
         set_motors(a_speed, b_speed);
         last_error = -2;
@@ -145,10 +207,8 @@ void line_following_algorithm(bool left, bool center, bool right, int turn_right
     {
         turn_right();
 
-        //a_speed = TURN_RIGHT_SPEED_A;
-        //b_speed = TURN_RIGHT_SPEED_B;
-        a_speed = turn_right_speed;
-        b_speed = turn_right_speed;
+        a_speed = TURN_RIGHT_SPEED_A;
+        b_speed = TURN_RIGHT_SPEED_B;
 
         set_motors(a_speed, b_speed);
         last_error = 2;
@@ -168,19 +228,7 @@ void line_following_algorithm(bool left, bool center, bool right, int turn_right
         return;
     }
     
-    // 0 1 0  CENTER
-    if(!left && center && !right)
-    {
-        go_forward();
-
-        a_speed = BASE_SPEED_A;
-        b_speed = BASE_SPEED_B;
-
-        set_motors(a_speed, b_speed);
-
-        last_error = 0;
-        return;
-    }
+  
     
     go_forward();
     a_speed = BASE_SPEED_A;

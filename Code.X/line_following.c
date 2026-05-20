@@ -18,8 +18,8 @@
 //       BLACK IS HIGH (1)
 //       DETECTION/ WHITE IS LOW (0)
 
-#define BASE_SPEED_A 30
-#define BASE_SPEED_B 33
+#define BASE_SPEED_A 28
+#define BASE_SPEED_B 29
 
 #define TURN_RIGHT_SPEED_A 25 // for sharper turn, increase A
 #define TURN_RIGHT_SPEED_B 25
@@ -95,8 +95,8 @@ void line_following_algorithm(bool left, bool center, bool right)
     if(left && center && right)
     {   
         go_forward();
-        a_speed = 30;
-        b_speed = 33;
+        a_speed = 28;
+        b_speed = 31;
         set_motors(a_speed, b_speed);
         last_error = 0;
         return;  
@@ -121,7 +121,7 @@ void line_following_algorithm(bool left, bool center, bool right)
     {   
         
         a_speed = 0;
-        b_speed = 27;
+        b_speed = 24;
         go_forward();
         set_motors(a_speed, b_speed);
         
@@ -130,7 +130,7 @@ void line_following_algorithm(bool left, bool center, bool right)
         if (!find_line()) {
  
           
-           for (int i = 0; i<3; i++) {
+           for (int i = 0; i<2; i++) {
                for (int i = 0; i < 5000; i++) {
                    turn_right();
                    set_motors(a_speed, b_speed);
@@ -155,8 +155,8 @@ void line_following_algorithm(bool left, bool center, bool right)
                    }
            
            
-           a_speed = 27;
-           b_speed = 27;
+           a_speed = 24;
+           b_speed = 24;
            for (int i = 0; i < 500000000; i++) {
            go_backward();
                 set_motors(a_speed, b_speed);

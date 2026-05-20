@@ -33,22 +33,22 @@ extern void stop(void);
 #define FRONT_THRESHOLD_CM    12     // not used directly, kept for compatibility
 
 // ------------------------ SIMPLE P?CONTROLLER SETTINGS ------------------------
-#define DESIRED_WALL_DIST_CM  4     // target distance from right wall
+#define DESIRED_WALL_DIST_CM  2     // target distance from right wall
 #define P_STEER_STRENGTH      1     // max correction (?4%)
 #define DEADBAND              1     // ignore errors within ?1 cm
 
 // ------------------------ MOTOR SPEEDS (your calibrated values) ------------------------
-#define BASE_SPEED_LEFT       25     // left wheel base speed (%)
-#define BASE_SPEED_RIGHT      24    // right wheel base speed (%)
+#define BASE_SPEED_LEFT       26     // left wheel base speed (%)
+#define BASE_SPEED_RIGHT      25    // right wheel base speed (%)
 #define MAX_SPEED             40    // upper speed limit
 #define MIN_SPEED             15    // lower speed limit
 
 // ------------------------ TURN CALIBRATIONS (your values) ------------------------
-#define TURN_RIGHT_MS         290   // 90? right turn duration (ms); 460; 700
+#define TURN_RIGHT_MS         270   // 90? right turn duration (ms); 460; 700
 #define TURN_RIGHT_SPEED      25    // PWM% during right turn (left wheel only)
-#define TURN_LEFT_MS          30   // 90? left turn duration (ms)  last is 375
+#define TURN_LEFT_MS          80   // 90? left turn duration (ms)  last is 375
 #define TURN_LEFT_SPEED       25    // PWM% during left turn (right wheel only)
-#define TURN_AROUND_MS        220    // 180? turn duration (ms); 85
+#define TURN_AROUND_MS        200    // 180? turn duration (ms); 85
 #define TURN_AROUND_SPEED     25    // PWM% during 180? turn
 
 // Forward movement after any turn (anti?loop)
@@ -228,18 +228,6 @@ uint32_t left_raw_to_cm(uint32_t raw) {
     else return raw / 44;
 }
 
-// ------------------------ SEND TO PUTTY (unchanged format) ------------------------
-void send_string(const char* str) {
-    while (platform_usart_cdc_tx_busy()) {
-        for (volatile int i = 0; i < 100; i++);
-    }
-    struct platform_ro_buf_desc desc = { str, strlen(str) };
-    platform_usart_cdc_send_async(&desc, 1);
-    while (platform_usart_cdc_tx_busy()) {
-        for (volatile int i = 0; i < 100; i++);
-    }
-}
-
 // ------------------------ DECISION TO TEXT (kept for display) ------------------------
 const char* get_decision_string(uint32_t action) {
     switch(action) {
@@ -333,7 +321,6 @@ void wall_following_algorithm(void) {
         init_sensor_pins();
         PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 15);  // PA15 for safe mode LED
         safe_mode_led(0);
-           
     }
 
     static enum { FOLLOW, TURN_RIGHT, TURN_LEFT, TURN_AROUND, SEEK } state = FOLLOW;
@@ -370,6 +357,11 @@ void wall_following_algorithm(void) {
         right_cm = 1;
     }
 
+    // ----- BLIND SPOT / TOO CLOSE DETECTION (left sensor) -----
+    if (left_raw > 5000 || left_cm <= 2) {
+        left_cm = 1;
+    }
+    
     // Stagnation detection
     #define STAG_TOLERANCE 1
     int right_diff = abs((int)right_cm - (int)last_right_cm);
@@ -391,17 +383,18 @@ void wall_following_algorithm(void) {
                     stagnation_triggered = 1;
                     safe_mode_led(2);  // special code for safe mode (fast blink)
                     stop();
-                   
-                    
-                    while(1);
+                    // Stay in safe mode forever
+                    //while(1);
                 } else {
                     // Normal reverse (no LED blink)
                     stagnation_triggered = 1;
+                    safe_mode_led(1);   // LED on during reverse
                     go_backward();
                     set_b_speed(STAGNATION_REVERSE_SPEED_LEFT);
                     set_a_speed(STAGNATION_REVERSE_SPEED_RIGHT);
                     delay_ms(STAGNATION_REVERSE_MS);
                     stop();
+                    safe_mode_led(0);   // LED off after reverse
                     last_sensor_time = 0;
                 }
             }
@@ -420,12 +413,23 @@ void wall_following_algorithm(void) {
         safe_mode_led(0);
     }
 
-    // ----- ANTI-SLAM (stronger left pivot) -----
+    // ----- RIGHT SENSOR ANTI-SLAM (left pivot) -----
     if (right_cm <= 4 && state != TURN_LEFT && state != TURN_RIGHT && state != TURN_AROUND) {
         turn_left(); 
-        set_a_speed(10);     // stronger pivot
-        set_b_speed(0); 
-        delay_ms(80);        // longer pivot
+        set_a_speed(12);     // right wheel forward
+        set_b_speed(0);      // left wheel stopped
+        delay_ms(90);        // pivot duration
+        last_sensor_time = 0;
+        stagnation_triggered = 0;
+        safe_mode_led(0);
+    }
+
+    // ----- LEFT SENSOR ANTI-SLAM (right pivot) -----
+    if (left_cm <= 3 && state != TURN_LEFT && state != TURN_RIGHT && state != TURN_AROUND) {
+        turn_right();
+        set_a_speed(12);     // right wheel forward
+        set_b_speed(0);      // left wheel stopped
+        delay_ms(90);        // pivot duration
         last_sensor_time = 0;
         stagnation_triggered = 0;
         safe_mode_led(0);
@@ -476,12 +480,12 @@ void wall_following_algorithm(void) {
             float p_term = error * 1.2f;
             
             // D?term for smoothness
-            float d_term = (error - last_error) * 0.0f;
+            float d_term = (error - last_error) * 0.15f;
             last_error = error;
             
             float correction = p_term + d_term;
             
-            // Very gentle limit: ?0.5%
+            // Very gentle limit: ±0.5%
             if (correction > 0.5f) correction = 0.5f;
             if (correction < -0.5f) correction = -0.5f;
             
@@ -574,5 +578,5 @@ void wall_following_algorithm(void) {
         default:         decision_str = "UNKNOWN"; break;
     }
 
-    delay_ms(10);
+    delay_ms(20);
 }

@@ -2,7 +2,7 @@
  * @file main.h
  *
  * Initial version:  EEE 158 AY2025-26 Sem 1 Handlers
- * Modifications by: <Insert name, section, student number here>
+ * Modifications by: Jam Eclarin
  *
  * Prototypes for functions defined in platform.c and irq_handlers.c,
  * and called from main.c
@@ -113,6 +113,24 @@ extern "C" {
     extern void go_forward(void);
     extern void go_backward(void);
     extern void stop(void);
+    extern int set_a_speed(int speed);
+    extern int set_b_speed(int speed);
+
+
+	extern void delay_ms(int ms);
+    
+    /**
+	 * For sensor checking
+         */
+    extern bool us_left(void);
+    extern bool us_center(void);
+    extern bool us_right(void);
+    extern bool ir_left(void);
+    extern bool ir_center(void);
+    extern bool ir_right(void);
+
+	extern void line_following_algorithm(bool left, bool center, bool right);
+    extern void wall_following_algorithm(void);
 	
 	/**
 	 * Get available platform-event flags
@@ -128,11 +146,6 @@ extern "C" {
 	 */
 	extern int platform_evt_get(void);
 
-    
-    //usart.c
-    
-    extern void platform_internal_usart_cdc_systick_handler(void);
-    
 	/// If set, the on-board button was pressed
 #define PLATFORM_EVT_PB_PRESS	(0x00000001)
 #define PLATFORM_TICK_MS	(10)

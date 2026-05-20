@@ -5,18 +5,7 @@
         <group>
             <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/wall_following.c</file>
             <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/usart.c</file>
-            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/platform.c</file>
-            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/main.h</file>
-            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/usart.h</file>
-            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/locomotion.c</file>
-            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/main.c</file>
-            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/locomotion.h</file>
-            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/init.h</file>
-            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/eee158_hplib.h</file>
             <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/line_following.c</file>
-            <file>file:/C:/Program%20Files/Microchip/MPLABX/v6.25/packs/Microchip/PIC32CM-LS_DFP/1.3.278/PIC32CM-LS00/xc32/PIC32CM5164LS00048/startup_pic32cm5164ls00048.c</file>
-            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/check_sensors.c</file>
-            <file>file:/C:/Users/Jami/Desktop/GitHub/EEE_192_Project/Code.X/irq_handlers.c</file>
         </group>
     </open-files>
 </project-private>
