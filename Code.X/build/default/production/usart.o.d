@@ -1,10 +1,10 @@
-build/default/production/usart.o: usart.c init.h usart.h main.h \
- eee158_hplib.h
+build/default/production/usart.o: usart.c init.h usart.h locomotion.h \
+ main.h
 
 init.h:
 
 usart.h:
 
-main.h:
+locomotion.h:
 
-eee158_hplib.h:
+main.h:

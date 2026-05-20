@@ -10,15 +10,17 @@
 #include "usart.h"
 #include "init.h"
 #include <xc.h>
+#include <string.h>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 
 volatile int idx_message;
 
 bool us_left_status, us_center_status, us_right_status, ir_left_status, ir_center_status, ir_right_status;
 int speed = 0;
-int setting = 0;
+int setting;
 char setting_ptr[9];
 
 static const char banner_msg[] =
@@ -104,9 +106,9 @@ typedef struct prog_state_type
 	unsigned int state_id;
 	
 	// Transmit stuff
-	struct platform_ro_buf_desc tx_desc[35];
+	struct platform_ro_buf_desc tx_desc[20];
 	uint16_t tx_nr_desc;
-	char	tx_buf[100];
+	char	tx_buf[60];
 	unsigned int tx_buf_len;
 	unsigned int idx_color_schem;
     
@@ -299,7 +301,6 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 			// Fall through
 		} else {
 			// No message received yet
-            setting = 0;
 			break;
 		}
 	case 2:
@@ -343,6 +344,9 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 			} else if (ps->rx_info.buf[0] == '3') {
 				idx_message = 3;
 			}
+            else if (ps->rx_info.buf[0] == ' ') {
+				setting = 0;
+			}
 		}
         
 		else if (ps->rx_info.len > 1 && ps->rx_info.buf[0] == '\033') {
@@ -361,6 +365,7 @@ static void prog_loop_do_one_rx(prog_state_t *ps)
 			    !memcmp(ps->rx_info.buf+1, "[15~", 4)) {
 				// Refresh (no color change)
 				ps->tx_flags |= 0x0001;
+                setting = 0;
 			}
 		}
         else {
@@ -413,7 +418,7 @@ int main(void) {
     ir_center_status = ir_center();
     ir_right_status = ir_right();
     
-    idx_message = 1;
+    idx_message = 3;
     
     for (;;) {
       
@@ -433,9 +438,6 @@ int main(void) {
        prog_loop_do_one_tx(&ps, idx_message);
        prog_loop_do_one_rx(&ps);
        
-       // for calibration
-       //idx_message = 1;
-       //setting = 1;
        
        switch (idx_message) {
            case 1:

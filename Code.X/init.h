@@ -1,140 +1,489 @@
-/**
- * @file platform.h
- *
- * Initial version:  EEE 158 AY2025-26 Sem 1 Handlers
- * Modifications by: <Insert student name, number, section>
- *
- * Platform-support functionality, core
- */
 
 /*
- * The outermost #if-#endif block makes sure that if this header file is
- * included multiple times (virtually always the case in production code), we
- * don't get multiple-definition errors from the compiler.
- *
- * (C/C++ Standard, "One-definition Rule" [ODR])
+ * ---------------------------------------------------------------------------
+ * DARC BOT - WALL FOLLOWING SUBSYSTEM (SENSOR + DECISION + CONTROL)
+ * Author: Kathleen Patajo
+ * ---------------------------------------------------------------------------
+ * 
+ * MODIFIED: Right?sensor?only safe wall following + forward after every turn.
+ *   - Uses only the right ultrasonic sensor for distance control.
+ *   - Simple P?controller to keep ~5 cm from right wall.
+ *   - If right wall disappears: turn right (one wheel stopped), then move forward.
+ *   - Also for left turn and 180? turn: after turning, move forward to break loops.
+ *   - Original Putty display format preserved.
  */
-#ifndef EEE158_INIT_H
-#define EEE158_INIT_H
 
-#include <stdint.h>
-#include <limits.h>
+#include "init.h"
+#include "usart.h"
+#include "locomotion.h"
+#include "main.h"
+#include <xc.h>
+#include <string.h>
+#include <stdio.h>
 
-// C99 compatibility with C++/C23's ``bool`` datatype
-#if !defined(__cplusplus) && __STDC_VERSION__ < 202311l
-#define bool _Bool
-#define true (1)
-#define false (0)
-#endif
+/* Motor control functions */
+extern void go_forward(void);
+extern void turn_left(void);
+extern void turn_right(void);
+extern void stop(void);
 
-/*
- * The "extern 'C'" block makes sure that, if this file gets included from
- * C++, name mangling is not performed.
- *
- * (You can search the C++ standard to find out about name mangling.)
- */
-#ifdef __cplusplus
-extern "C" {
-#endif
+// ------------------------ THRESHOLDS ------------------------
+#define SIDE_THRESHOLD_CM     20    // >15cm = no wall, turn right
+#define FRONT_THRESHOLD_CM    10     // not used directly, kept for compatibility
 
-	/**
-	 * Perform early platform initialization
-	 * 
-	 * @details
-	 * The initialization phase is split into "early" and "late" parts.
-	 * Once the full initialization process is complete, interrupts are
-	 * enabled and the code must be ready to process them anytime. For this
-	 * reason, the application must initialize all it needs between this
-	 * function and platform_init_late().
-	 * 
-	 * @remarks
-	 * Upon return from this function, the platform will have the following
-	 * characteristics:
-	 *	- CPU clock boosted to 24 MHz;
-	 *	- GCLK_GEN2 configured and enabled for 4 MHz from OSC16M;
-	 *	- EIC & EVSYS reset; and
-	 *	- EIC's generic-clock input enabled.
-	 */
-	
+// ------------------------ SIMPLE P?CONTROLLER SETTINGS ------------------------
+#define DESIRED_WALL_DIST_CM  5     // target distance from right wall
+#define P_STEER_STRENGTH      1     // max correction (?4%)
+#define DEADBAND              1     // ignore errors within ?1 cm
 
-    /**
-     * Trigger a system reset
-     * 
-     * @note
-     * This function never returns.
-     */
-    extern void __attribute__((noreturn)) platform_do_sys_reset(void);
-    extern void platform_init_late(void);
-    extern void __attribute__((noreturn)) platform_do_sys_reset(void);
-	// ==================================================================
+// ------------------------ MOTOR SPEEDS (your calibrated values) ------------------------
+#define BASE_SPEED_LEFT       25     // left wheel base speed (%)
+#define BASE_SPEED_RIGHT      25    // right wheel base speed (%)
+#define MAX_SPEED             40    // upper speed limit
+#define MIN_SPEED             20    // lower speed limit
 
-	/// Simple descriptor for a constant-content buffer
-	struct platform_ro_buf_desc {
-		/// First byte in the buffer
-		const char *buf;
+// ------------------------ TURN CALIBRATIONS (your values) ------------------------
+#define TURN_RIGHT_MS         315   // 90? right turn duration (ms); 460; 700
+#define TURN_RIGHT_SPEED      25    // PWM% during right turn (left wheel only)
+#define TURN_LEFT_MS          140   // 90? left turn duration (ms)  last is 375
+#define TURN_LEFT_SPEED       25    // PWM% during left turn (right wheel only)
+#define TURN_AROUND_MS        240    // 180? turn duration (ms); 85
+#define TURN_AROUND_SPEED     25    // PWM% during 180? turn
 
-		/// Number of bytes in the buffer
-		unsigned int len;
-	};
+// Forward movement after any turn (anti?loop)
+#define FORWARD_AFTER_TURN_MS 1000  // drive straight for 1 second after turn
 
-	/**
-	 * Declare a buffer containing the given constant C string
-	 *
-	 * @param v_name	Variable name
-	 * @param str		String contents
-	 */
-#define DECLARE_PLATFORM_RO_STR_DESC(v_name, str)	\
-	struct platform_ro_buf_desc ## v_name ## = {	\
-		.buf = (str),				\
-		.len = sizeof(str)-1			\
-	}
+#define BALANCE_OFFSET        0
 
-	// ==================================================================
+// ------------------------ LOCAL SPEED CONTROL ------------------------
+#define MAX_PWM               99
+#define MIN_EFFECTIVE_SPEED   10
 
-	
-	
-	/**
-	 * Get available platform-event flags
-	 *
-	 * This function is intended to be called from within the main infinite
-	 * loop.
-	 *
-	 * @note
-	 * The set of event flags is completely application-defined. In
-	 * addition, this function clears all added event flags so that they
-	 * will not appear again until re-added via a call to
-	 * platform_evt_add().
-	 */
-
-
-	/// If set, the on-board button was pressed
-
-	
-	/// Initialize the GPIO
-	extern void platform_PB_LED_init(void);
-
-	/**
-	 * These set of functions control the on-board LED.
-	 *
-	 * @{
-	 */
-	
-	//!<@}
-
-	// ==================================================================
-
-	/// Get the current number of SysTick occurrences, as a raw value
-	
-
-	/// Get the difference between two ticks, considering overflow
-	extern uint32_t platform_tick_delta(uint32_t lhs, uint32_t rhs);
-	
-	/// Number of milliseconds corresponding to one SysTick occurrence
-
-
-
-	// ==================================================================
-#ifdef __cplusplus
+int set_a(int speed_percent) {
+    int pwm;
+    if (speed_percent < 0) speed_percent = 0;
+    if (speed_percent > 100) speed_percent = 100;
+    if (speed_percent > 0 && speed_percent < MIN_EFFECTIVE_SPEED)
+        speed_percent = MIN_EFFECTIVE_SPEED;
+    pwm = (speed_percent * MAX_PWM) / 100;
+    if ((TCC3_REGS->TCC_SYNCBUSY & 0x00000080) == 0) {
+        TCC3_REGS->TCC_CCBUF[1] = pwm;   // motor A = right wheel
+    }
+    return pwm;
 }
-#endif
-#endif
+
+int set_b(int speed_percent) {
+    int pwm;
+    if (speed_percent < 0) speed_percent = 0;
+    if (speed_percent > 100) speed_percent = 100;
+    if (speed_percent > 0 && speed_percent < MIN_EFFECTIVE_SPEED)
+        speed_percent = MIN_EFFECTIVE_SPEED;
+    pwm = (speed_percent * MAX_PWM) / 100;
+    if ((TCC3_REGS->TCC_SYNCBUSY & 0x00000080) == 0) {
+        TCC3_REGS->TCC_CCBUF[0] = pwm;   // motor B = left wheel
+    }
+    return pwm;
+}
+
+// ------------------------ DEBOUNCE & COOLDOWN ------------------------
+static uint8_t right_open_counter = 0;
+#define RIGHT_OPEN_DEBOUNCE 1
+static uint32_t turn_cooldown_end = 0;
+//#define TURN_COOLDOWN_MS 300
+//#define TURN_COOLDOWN_MS 300
+
+// ------------------------ DELAYS ------------------------
+static void delay_us(uint32_t us) {
+    for (volatile uint32_t i = 0; i < (us * 5); i++);
+}
+
+// ------------------------ SENSOR READ FUNCTIONS (unchanged) ------------------------
+uint32_t read_right_sensor_raw(void) {
+    uint32_t echo_time = 0;
+    uint32_t timeout;
+    PORT_SEC_REGS->GROUP[1].PORT_OUTCLR = (1 << 2);
+    delay_us(2);
+    PORT_SEC_REGS->GROUP[1].PORT_OUTSET = (1 << 2);
+    delay_us(10);
+    PORT_SEC_REGS->GROUP[1].PORT_OUTCLR = (1 << 2);
+    timeout = 30000;
+    while ((PORT_SEC_REGS->GROUP[1].PORT_IN & (1 << 22)) == 0) {
+        if (--timeout == 0) return 99999;
+    }
+    timeout = 30000;
+    while ((PORT_SEC_REGS->GROUP[1].PORT_IN & (1 << 22)) != 0) {
+        echo_time++;
+        if (--timeout == 0) return 99999;
+    }
+    return echo_time;
+}
+
+uint32_t read_front_sensor_raw(void) {
+    uint32_t echo_time = 0;
+    uint32_t timeout;
+    PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 17);
+    delay_us(2);
+    PORT_SEC_REGS->GROUP[0].PORT_OUTSET = (1 << 17);
+    delay_us(10);
+    PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 17);
+    timeout = 30000;
+    while ((PORT_SEC_REGS->GROUP[0].PORT_IN & (1 << 18)) == 0) {
+        if (--timeout == 0) return 99999;
+    }
+    timeout = 30000;
+    while ((PORT_SEC_REGS->GROUP[0].PORT_IN & (1 << 18)) != 0) {
+        echo_time++;
+        if (--timeout == 0) return 99999;
+    }
+    return echo_time;
+}
+
+uint32_t read_left_sensor_raw(void) {
+    uint32_t echo_time = 0;
+    uint32_t timeout;
+    PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 0);
+    delay_us(2);
+    PORT_SEC_REGS->GROUP[0].PORT_OUTSET = (1 << 0);
+    delay_us(10);
+    PORT_SEC_REGS->GROUP[0].PORT_OUTCLR = (1 << 0);
+    timeout = 30000;
+    while ((PORT_SEC_REGS->GROUP[0].PORT_IN & (1 << 1)) == 0) {
+        if (--timeout == 0) return 99999;
+    }
+    timeout = 30000;
+    while ((PORT_SEC_REGS->GROUP[0].PORT_IN & (1 << 1)) != 0) {
+        echo_time++;
+        if (--timeout == 0) return 99999;
+    }
+    return echo_time;
+}
+
+void init_sensor_pins(void) {
+    // FRONT
+    PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 17);
+    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 18);
+    PORT_SEC_REGS->GROUP[0].PORT_PINCFG[18] = 0x02;
+    // LEFT
+    PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 0);
+    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR = (1 << 1);
+    PORT_SEC_REGS->GROUP[0].PORT_PINCFG[1] = 0x02;
+    // RIGHT
+    PORT_SEC_REGS->GROUP[1].PORT_DIRSET = (1 << 2);
+    PORT_SEC_REGS->GROUP[1].PORT_DIRCLR = (1 << 22);
+    PORT_SEC_REGS->GROUP[1].PORT_PINCFG[22] = 0x02;
+}
+
+// ------------------------ RAW TO CM (your calibrations) ------------------------
+uint32_t right_raw_to_cm(uint32_t raw) {
+    if (raw <= 85) return 1;
+    else if (raw <= 110) return 2;
+    else if (raw <= 130) return 3;
+    else if (raw <= 190) return 4;
+    else if (raw <= 220) return 5;
+    else if (raw <= 260) return 6;
+    else if (raw <= 300) return 7;
+    else if (raw <= 350) return 8;
+    else if (raw <= 430) return 9;
+    else if (raw <= 470) return 10;
+    else if (raw <= 520) return 11;
+    else if (raw <= 560) return 12;
+    else if (raw <= 600) return 13;
+    else if (raw <= 650) return 14;
+    else return raw / 44;
+}
+
+uint32_t front_raw_to_cm(uint32_t raw) {
+    if (raw <= 100) return 1;
+    else if (raw <= 120) return 2;
+    else if (raw <= 135) return 3;
+    else if (raw <= 190) return 4;
+    else if (raw <= 230) return 5;
+    else if (raw <= 280) return 6;
+    else if (raw <= 320) return 7;
+    else if (raw <= 380) return 8;
+    else if (raw <= 400) return 9;
+    else if (raw <= 450) return 10;
+    else return raw / 44;
+}
+
+uint32_t left_raw_to_cm(uint32_t raw) {
+    if (raw <= 100) return 1;
+    else if (raw <= 120) return 2;
+    else if (raw <= 150) return 3;
+    else if (raw <= 230) return 4;
+    else if (raw <= 280) return 5;
+    else if (raw <= 320) return 6;
+    else if (raw <= 380) return 7;
+    else if (raw <= 410) return 8;
+    else if (raw <= 470) return 9;
+    else if (raw <= 520) return 10;
+    else return raw / 44;
+}
+
+// ------------------------ SEND TO PUTTY (unchanged format) ------------------------
+void send_string(const char* str) {
+    while (platform_usart_cdc_tx_busy()) {
+        for (volatile int i = 0; i < 100; i++);
+    }
+    struct platform_ro_buf_desc desc = { str, strlen(str) };
+    platform_usart_cdc_send_async(&desc, 1);
+    while (platform_usart_cdc_tx_busy()) {
+        for (volatile int i = 0; i < 100; i++);
+    }
+}
+
+// ------------------------ DECISION TO TEXT (kept for display) ------------------------
+const char* get_decision_string(uint32_t action) {
+    switch(action) {
+        case 0: return "FORWARD";
+        case 1: return "TURN RIGHT";
+        case 2: return "TURN LEFT";
+        case 3: return "TURN AROUND";
+        default: return "UNKNOWN";
+    }
+}
+
+// ------------------------ RIGHT-HAND RULE (unused, but kept for compatibility) ------------------------
+uint32_t get_right_hand_rule_action(uint32_t left_cm, uint32_t front_cm, uint32_t right_cm) {
+    (void)left_cm; (void)front_cm; (void)right_cm;
+    return 0; // not used
+}
+
+// ------------------------ SIMPLE P?CONTROLLER (replaces PID) ------------------------
+int compute_pid_correction(uint32_t current_cm, float dt, float *integral, float *previous_error) {
+    (void)dt; (void)integral; (void)previous_error;
+    if (current_cm > 100) return 0;
+    int error = (int)current_cm - (int)DESIRED_WALL_DIST_CM;
+    int correction = 0;
+    if (error > DEADBAND)
+        correction = P_STEER_STRENGTH;
+    else if (error < -DEADBAND)
+        correction = -P_STEER_STRENGTH;
+    else
+        correction = 0;
+    return correction;
+}
+
+const char* get_correction_string(int correction) {
+    if (correction <= -8) return "(STEER HARD LEFT)";
+    else if (correction < 0) return "(STEER LEFT)";
+    else if (correction >= 8) return "(STEER HARD RIGHT)";
+    else if (correction > 0) return "(STEER RIGHT)";
+    else return "(CENTER)";
+}
+
+
+
+// ------------------------ MAIN WALL FOLLOWING ALGORITHM (spin turns, no stop) ------------------------
+// ------------------------ STAGNATION DETECTION (for physical jams) ------------------------
+#define STAGNATION_TIMEOUT_MS   450   // if no sensor change for 500 ms -> reverse
+#define STAGNATION_REVERSE_MS   350   // reverse duration (ms)
+#define STAGNATION_REVERSE_SPEED_LEFT  10   // left wheel speed during reverse (%)
+#define STAGNATION_REVERSE_SPEED_RIGHT 18   // right wheel speed during reverse (%)
+
+void wall_following_algorithm(void) {
+    static uint8_t initialized = 0;
+    if (!initialized) {
+        initialized = 1;
+        init_sensor_pins();
+        send_string("\033[2J\033[H");
+        send_string("\r\n=== RIGHT?HAND RULE (SPIN TURNS, NO STOP) ===\r\n");
+        //delay_ms(1000);
+    }
+
+    static enum { FOLLOW, TURN_RIGHT, TURN_LEFT, TURN_AROUND, SEEK } state = FOLLOW;
+    static uint32_t turn_start_time = 0;
+    static uint8_t turn_ongoing = 0;
+    static uint8_t seek_wall_detected_counter = 0;
+    #define SEEK_DEBOUNCE_COUNT 3
+    static uint8_t wall_lost_counter = 0;
+    #define WALL_LOST_DEBOUNCE 2
+    static uint32_t turn_cooldown_end = 0;
+    #define TURN_COOLDOWN_MS 500
+
+    // ---- Stagnation detection variables ----
+    static uint32_t last_sensor_time = 0;
+    static uint32_t last_right_cm = 0, last_front_cm = 0, last_left_cm = 0;
+    static uint8_t stagnation_triggered = 0;
+
+    uint32_t current_time = platform_systick_count();
+
+    uint32_t right_raw = read_right_sensor_raw();
+    uint32_t front_raw = read_front_sensor_raw();
+    uint32_t left_raw  = read_left_sensor_raw();
+    uint32_t right_cm = right_raw_to_cm(right_raw);
+    uint32_t front_cm = front_raw_to_cm(front_raw);
+    uint32_t left_cm  = left_raw_to_cm(left_raw);
+
+    char dbg[80];
+    snprintf(dbg, sizeof(dbg), "F=%2lu R=%2lu L=%2lu\r\n", front_cm, right_cm, left_cm);
+    send_string(dbg);
+
+        // ----- Stagnation detection with tolerance (?1 cm) -----
+    #define STAG_TOLERANCE 1
+    int right_diff = abs((int)right_cm - (int)last_right_cm);
+    int front_diff = abs((int)front_cm - (int)last_front_cm);
+    int left_diff  = abs((int)left_cm  - (int)last_left_cm);
+
+    if (right_diff <= STAG_TOLERANCE && front_diff <= STAG_TOLERANCE && left_diff <= STAG_TOLERANCE) {
+        if (last_sensor_time == 0) {
+            last_sensor_time = current_time;
+        } else if (platform_tick_delta(current_time, last_sensor_time) >= (STAGNATION_TIMEOUT_MS / PLATFORM_MS_PER_SYSTICK)) {
+            if (!stagnation_triggered) {
+                stagnation_triggered = 1;
+                send_string(">>> STAGNATION DETECTED! Reversing...\r\n");
+                // Use proper go_backward() with separate wheel speeds
+                go_backward();
+                set_b_speed(STAGNATION_REVERSE_SPEED_LEFT);
+                set_a_speed(STAGNATION_REVERSE_SPEED_RIGHT);
+                delay_ms(STAGNATION_REVERSE_MS);
+                stop();
+                send_string("Reverse done.\r\n");
+                last_sensor_time = 0;
+            }
+        }
+    } else {
+        // Distances changed enough ? reset stagnation detection
+        last_right_cm = right_cm;
+        last_front_cm = front_cm;
+        last_left_cm = left_cm;
+        last_sensor_time = 0;
+        stagnation_triggered = 0;
+    }
+
+    if (right_raw > 5000) right_cm = 1;
+
+    // Anti?slam (gentle left pivot) ? only for right sensor
+    if (right_cm <= 2 && state != TURN_LEFT && state != TURN_RIGHT && state != TURN_AROUND) {
+        turn_left(); set_a_speed(8); set_b_speed(0); delay_ms(40);
+        send_string("ANTI-SLAM\r\n");
+        last_sensor_time = 0;
+        stagnation_triggered = 0;
+    }
+
+    // ----- TURN AROUND (all three walls) -----
+    if (front_cm <= FRONT_THRESHOLD_CM && right_cm <= SIDE_THRESHOLD_CM && left_cm <= SIDE_THRESHOLD_CM) {
+        if (state != TURN_AROUND && state != TURN_LEFT && state != TURN_RIGHT) {
+            send_string(">>> DEAD END -> 180? COUNTER?CLOCKWISE SPIN <<<\r\n");
+            state = TURN_AROUND;
+            turn_ongoing = 1;
+            turn_start_time = current_time;
+            turn_left();    // counter?clockwise spin
+            set_b_speed(TURN_AROUND_SPEED);
+            set_a_speed(TURN_AROUND_SPEED);
+            last_sensor_time = 0;
+            stagnation_triggered = 0;
+        }
+    }
+    // ----- LEFT TURN (front and right blocked) -----
+    else if (front_cm <= FRONT_THRESHOLD_CM && right_cm <= SIDE_THRESHOLD_CM) {
+        if (state != TURN_LEFT && state != TURN_RIGHT && state != TURN_AROUND) {
+            send_string(">>> FRONT+RIGHT -> LEFT SPIN <<<\r\n");
+            state = TURN_LEFT;
+            turn_ongoing = 1;
+            turn_start_time = current_time;
+            turn_left();
+            set_b_speed(TURN_LEFT_SPEED);
+            set_a_speed(TURN_LEFT_SPEED);
+            last_sensor_time = 0;
+            stagnation_triggered = 0;
+        }
+    }
+
+    if (turn_cooldown_end != 0 && platform_tick_delta(current_time, turn_cooldown_end) >= 0)
+        turn_cooldown_end = 0;
+
+    switch (state) {
+        case FOLLOW:
+        {
+            int error = (int)DESIRED_WALL_DIST_CM - (int)right_cm;
+            int correction = (int)(error * 0.01f);
+            if (correction > 1) correction = 1;
+            if (correction < -1) correction = -1;
+
+            int left_speed = BASE_SPEED_LEFT + correction;
+            int right_speed = BASE_SPEED_RIGHT - correction;
+
+            if (left_speed > MAX_SPEED) left_speed = MAX_SPEED;
+            if (left_speed < MIN_SPEED) left_speed = MIN_SPEED;
+            if (right_speed > MAX_SPEED) right_speed = MAX_SPEED;
+            if (right_speed < MIN_SPEED) right_speed = MIN_SPEED;
+
+            go_forward();
+            set_b_speed(left_speed);
+            set_a_speed(right_speed);
+
+            char disp[128];
+            snprintf(disp, sizeof(disp),
+                     "FOLLOW | R=%2lu F=%2lu L=%2lu | L=%2d R=%2d\r",
+                     right_cm, front_cm, left_cm, left_speed, right_speed);
+            send_string(disp);
+
+            // Right wall loss (debounced)
+            if (right_cm > SIDE_THRESHOLD_CM) {
+                wall_lost_counter++;
+                if (wall_lost_counter >= WALL_LOST_DEBOUNCE && turn_cooldown_end == 0 && state == FOLLOW) {
+                    state = TURN_RIGHT;
+                    turn_ongoing = 1;
+                    turn_start_time = current_time;
+                    send_string("\nWall lost -> right spin\r\n");
+                    turn_right();
+                    set_b_speed(TURN_RIGHT_SPEED);
+                    set_a_speed(TURN_RIGHT_SPEED);
+                    wall_lost_counter = 0;
+                    last_sensor_time = 0;
+                    stagnation_triggered = 0;
+                }
+            } else {
+                wall_lost_counter = 0;
+            }
+            break;
+        }
+
+        case TURN_RIGHT:
+            if (turn_ongoing && platform_tick_delta(current_time, turn_start_time) >= (TURN_RIGHT_MS / PLATFORM_MS_PER_SYSTICK)) {
+                turn_ongoing = 0; state = SEEK; turn_cooldown_end = current_time + (TURN_COOLDOWN_MS / PLATFORM_MS_PER_SYSTICK);
+                send_string("Right spin done -> SEEK\r\n");
+                last_sensor_time = 0;
+                stagnation_triggered = 0;
+            }
+            break;
+
+        case TURN_LEFT:
+            if (turn_ongoing && platform_tick_delta(current_time, turn_start_time) >= (TURN_LEFT_MS / PLATFORM_MS_PER_SYSTICK)) {
+                turn_ongoing = 0; state = SEEK; turn_cooldown_end = current_time + (TURN_COOLDOWN_MS / PLATFORM_MS_PER_SYSTICK);
+                send_string("Left spin done -> SEEK\r\n");
+                last_sensor_time = 0;
+                stagnation_triggered = 0;
+            }
+            break;
+
+        case TURN_AROUND:
+            if (turn_ongoing && platform_tick_delta(current_time, turn_start_time) >= (TURN_AROUND_MS / PLATFORM_MS_PER_SYSTICK)) {
+                turn_ongoing = 0;
+                state = SEEK;
+                turn_cooldown_end = current_time + (TURN_COOLDOWN_MS / PLATFORM_MS_PER_SYSTICK);
+                send_string("180? counter?clockwise spin done -> SEEK\r\n");
+                last_sensor_time = 0;
+                stagnation_triggered = 0;
+            }
+            break;
+
+        case SEEK:
+            go_forward(); set_b_speed(BASE_SPEED_LEFT); set_a_speed(BASE_SPEED_RIGHT);
+            send_string("SEEK mode\r");
+            if (right_cm <= SIDE_THRESHOLD_CM) {
+                seek_wall_detected_counter++;
+                if (seek_wall_detected_counter >= SEEK_DEBOUNCE_COUNT) {
+                    state = FOLLOW; seek_wall_detected_counter = 0;
+                    send_string("Wall found -> FOLLOW\r\n");
+                    last_sensor_time = 0;
+                    stagnation_triggered = 0;
+                }
+            } else {
+                seek_wall_detected_counter = 0;
+            }
+            break;
+    }
+    delay_ms(10);
+}
