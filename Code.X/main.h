@@ -130,6 +130,7 @@ extern "C" {
     extern bool ir_right(void);
 
 	extern void line_following_algorithm(bool left, bool center, bool right);
+    extern void wall_following_algorithm(void);
 	
 	/**
 	 * Get available platform-event flags
