@@ -1,5 +1,5 @@
 build/default/production/locomotion.o: locomotion.c main.h eee158_hplib.h \
- usart.h init.h locomotion.h
+ usart.h init.h
 
 main.h:
 
@@ -8,5 +8,3 @@ eee158_hplib.h:
 usart.h:
 
 init.h:
-
-locomotion.h:

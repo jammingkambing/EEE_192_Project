@@ -98,6 +98,13 @@ static void delay_us(uint32_t us) {
     for (volatile uint32_t i = 0; i < (us * 5); i++);
 }
 
+void delay_ms(int ms)
+{
+    for(int i = 0; i < ms; i++)
+    {
+        for(volatile int j = 0; j < 4000; j++);
+    }
+}
 // ------------------------ SENSOR READ FUNCTIONS (unchanged) ------------------------
 uint32_t read_right_sensor_raw(void) {
     uint32_t echo_time = 0;
@@ -470,7 +477,7 @@ void wall_following_algorithm(void) {
             float p_term = error * 1.2f;
             
             // D?term for smoothness
-            float d_term = (error - last_error) * 0.of;
+            float d_term = (error - last_error) * 0.0f;
             last_error = error;
             
             float correction = p_term + d_term;
