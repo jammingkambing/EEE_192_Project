@@ -17,6 +17,7 @@
 
 #define PLATFORM_EVT_ALL (PLATFORM_EVT_SW1_PRESS)
 
+extern volatile int idx_message;
 static volatile uint32_t ctr_nres = 0;
 static volatile int evt_flags = 0;
 static volatile int tick_ctr = 0;
@@ -113,11 +114,19 @@ void __attribute__((interrupt)) EIC_EXTINT_1_Handler(void)
 	}
 }
 
+// For push button manual swap
 void __attribute__((interrupt)) EIC_EXTINT_2_Handler(void)
 {
 	// ISR body here. Keep it short and simple!
 	if ((EIC_SEC_REGS->EIC_INTFLAG & (1 << 2)) != 0) {
 
+        if (idx_message == 2) {
+            idx_message = 3;
+        }
+        else {
+            idx_message = 2;
+        }
+        
 		EIC_SEC_REGS->EIC_INTFLAG |= (1 << 2);
 	}
 }

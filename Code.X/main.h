@@ -75,6 +75,7 @@ extern "C" {
 	 *	- EIC & EVSYS reset; and
 	 *	- EIC's generic-clock input enabled.
 	 */
+    extern volatile int idx_message;
 	extern void platform_init_early(void);
 	
 	/**

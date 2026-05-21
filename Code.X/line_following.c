@@ -36,6 +36,20 @@
 static int a_speed = 0;
 static int b_speed = 0;
 
+#define SWEEP_DURATION_MS     150   // How long to sweep in one direction before swapping
+#define REVERSE_DURATION_MS   2500  // Maximum fallback time if line is completely lost
+
+typedef enum {
+    LF_STATE_FOLLOWING,    // Normal line following operation
+    LF_STATE_SCAN_RIGHT,   // Sweep right phase (replacing the first inner loop)
+    LF_STATE_SCAN_LEFT,    // Sweep left phase (replacing the second inner loop)
+    LF_STATE_REVERSE       // Backing up to find line (replacing the 700M loop)
+} lf_recovery_state_t;
+
+static lf_recovery_state_t recovery_state = LF_STATE_FOLLOWING;
+static uint32_t phase_start_time = 0;
+static int sweep_counter = 0; // Tracks the 3 sweeping attempts
+
 
 #define INTEGRAL_LIMIT 80
 #define SEARCH_TIME 120
@@ -117,58 +131,100 @@ void line_following_algorithm(bool left, bool center, bool right)
         
 
     // Line Lost (0 0 0) ALL WHITE DETECTED
-    if(!left && !center && !right)
+    // Line Lost (0 0 0) ALL WHITE DETECTED
+    if (!left && !center && !right)
     {   
-        
-        a_speed = 0;
-        b_speed = 24;
-        go_forward();
-        set_motors(a_speed, b_speed);
-        
-        
-        
-        if (!find_line()) {
- 
-          
-           for (int i = 0; i<2; i++) {
-               for (int i = 0; i < 5000; i++) {
-                   turn_right();
-                   set_motors(a_speed, b_speed);
-                   if (find_line()) {
-                       return;
-                   }
-               }
-               
-           
-               for (int i = 0; i < 5000; i++) {
-                   turn_left();
-                   set_motors(b_speed, a_speed);
-                   if (find_line()) {
-                       return;
-                   }
-               }
-          
-           }
-           
-           if (find_line()) {
-                       return;
-                   }
-           
-           
-           a_speed = 24;
-           b_speed = 24;
-           for (int i = 0; i < 500000000; i++) {
-           go_backward();
+        uint32_t current_time = platform_systick_count();
+
+        // If this is the very first loop cycle where the line was lost, initialize recovery
+        if (recovery_state == LF_STATE_FOLLOWING) {
+            if (!find_line()) {
+                recovery_state = LF_STATE_SCAN_RIGHT;
+                phase_start_time = current_time;
+                sweep_counter = 0;
+            } else {
+                return; // Line found on ambient check, safe exit
+            }
+        }
+
+        // Process recovery actions dynamically without freezing execution
+        switch (recovery_state) {
+            
+            case LF_STATE_SCAN_RIGHT:
+                turn_right();
+                a_speed = 0;
+                b_speed = 24;
                 set_motors(a_speed, b_speed);
+
                 if (find_line()) {
+                    recovery_state = LF_STATE_FOLLOWING;
                     return;
                 }
-           }
-           // SAFE MODE HERE
+
+                // Check if sweep time window has concluded
+                if (platform_tick_delta(current_time, phase_start_time) >= (SWEEP_DURATION_MS / PLATFORM_TICK_MS)) {
+                    // Pivot immediately to scanning left
+                    recovery_state = LF_STATE_SCAN_LEFT;
+                    phase_start_time = current_time;
+                }
+                break;
+
+            case LF_STATE_SCAN_LEFT:
+                turn_left();
+                a_speed = 0;
+                b_speed = 24;
+                set_motors(b_speed, a_speed); // Preserving your logic swap
+
+                if (find_line()) {
+                    recovery_state = LF_STATE_FOLLOWING;
+                    return;
+                }
+
+                // Check if sweep time window has concluded
+                if (platform_tick_delta(current_time, phase_start_time) >= (SWEEP_DURATION_MS / PLATFORM_TICK_MS)) {
+                    sweep_counter++;
+                    
+                    if (sweep_counter < 3) {
+                        // Loop back to try scanning right again
+                        recovery_state = LF_STATE_SCAN_RIGHT;
+                        phase_start_time = current_time;
+                    } else {
+                        // Exhausted 3 sweeps, switch to backing up
+                        recovery_state = LF_STATE_REVERSE;
+                        phase_start_time = current_time;
+                    }
+                }
+                break;
+
+            case LF_STATE_REVERSE:
+                go_backward();
+                a_speed = 24;
+                b_speed = 24;
+                set_motors(a_speed, b_speed);
+
+                if (find_line()) {
+                    recovery_state = LF_STATE_FOLLOWING;
+                    return;
+                }
+
+                // Check if backup window has expired
+                if (platform_tick_delta(current_time, phase_start_time) >= (REVERSE_DURATION_MS / PLATFORM_TICK_MS)) {
+                    // TODO: Trigger Safe Mode or hard fault stop here
+                    stop();
+                }
+                break;
+                
+            default:
+                recovery_state = LF_STATE_FOLLOWING;
+                break;
         }
         
         return;
     }
+
+    // Reset recovery tracker if we are hitting any of your valid line detection cases below
+    recovery_state = LF_STATE_FOLLOWING;
+    
 
     // 1 0 0  LEFT
     if(left && !center && !right)
